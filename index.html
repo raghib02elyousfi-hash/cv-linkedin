@@ -1,38 +1,250 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Optimiza tu CV - Raghib HR</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f0f4f8;
+      color: #1a202c;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 16px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    header h1 {
+      font-size: 2rem;
+      color: #2b6cb0;
+    }
+
+    header p {
+      margin-top: 8px;
+      color: #4a5568;
+      font-size: 1.05rem;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      padding: 40px;
+      width: 100%;
+      max-width: 580px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 6px;
+      font-size: 0.95rem;
+    }
+
+    label .required {
+      color: #e53e3e;
+      margin-left: 3px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="url"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid #cbd5e0;
+      border-radius: 7px;
+      font-size: 0.95rem;
+      transition: border-color 0.2s;
+      outline: none;
+      font-family: inherit;
+      background: #fafbfc;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: #3182ce;
+      background: #fff;
+    }
+
+    input.invalid, select.invalid, textarea.invalid {
+      border-color: #e53e3e;
+    }
+
+    .error-msg {
+      color: #e53e3e;
+      font-size: 0.82rem;
+      margin-top: 4px;
+      display: none;
+    }
+
+    .error-msg.visible { display: block; }
+
+    textarea {
+      resize: vertical;
+      min-height: 110px;
+    }
+
+    button[type="submit"] {
+      width: 100%;
+      padding: 12px;
+      background: #2b6cb0;
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 8px;
+    }
+
+    button[type="submit"]:hover { background: #2c5282; }
+
+    #success-msg {
+      display: none;
+      background: #c6f6d5;
+      color: #276749;
+      border-radius: 7px;
+      padding: 16px;
+      text-align: center;
+      font-weight: 600;
+      margin-top: 20px;
+    }
+
+    footer {
+      margin-top: 32px;
+      color: #718096;
+      font-size: 0.88rem;
+    }
+  </style>
 </head>
 
 <body>
 
-  <!-- Título principal -->
-  <h1>Mejora tu CV y LinkedIn</h1>
+  <header>
+    <h1>Mejora tu CV y LinkedIn</h1>
+    <p>Rellena este formulario y te ayudaré a mejorar tu perfil profesional.</p>
+  </header>
 
-  <!-- Descripción -->
-  <p>Rellena este formulario y te ayudaré a mejorar tu perfil profesional.</p>
+  <div class="card">
+    <form id="cv-form" novalidate>
 
-  <!-- Formulario -->
-  <form>
+      <div class="form-group">
+        <label for="nombre">Nombre<span class="required">*</span></label>
+        <input type="text" id="nombre" name="nombre" placeholder="Tu nombre completo" required>
+        <span class="error-msg" id="nombre-error">Por favor, introduce tu nombre.</span>
+      </div>
 
-    <!-- Nombre -->
-    <label>Nombre:</label><br>
-    <input type="text"><br><br>
+      <div class="form-group">
+        <label for="email">Email<span class="required">*</span></label>
+        <input type="email" id="email" name="email" placeholder="tu@email.com" required>
+        <span class="error-msg" id="email-error">Por favor, introduce un email válido.</span>
+      </div>
 
-    <!-- Email -->
-    <label>Email:</label><br>
-    <input type="email"><br><br>
+      <div class="form-group">
+        <label for="linkedin">URL de LinkedIn</label>
+        <input type="url" id="linkedin" name="linkedin" placeholder="https://linkedin.com/in/tu-perfil">
+        <span class="error-msg" id="linkedin-error">Por favor, introduce una URL válida.</span>
+      </div>
 
-    <!-- Experiencia -->
-    <label>Experiencia:</label><br>
-    <textarea></textarea><br><br>
+      <div class="form-group">
+        <label for="puesto-actual">Puesto actual</label>
+        <input type="text" id="puesto-actual" name="puesto_actual" placeholder="p. ej. Desarrollador Backend">
+      </div>
 
-    <!-- Botón -->
-    <button>Enviar</button>
+      <div class="form-group">
+        <label for="puesto-objetivo">Puesto al que aspiras<span class="required">*</span></label>
+        <input type="text" id="puesto-objetivo" name="puesto_objetivo" placeholder="p. ej. Tech Lead" required>
+        <span class="error-msg" id="puesto-objetivo-error">Por favor, indica el puesto al que aspiras.</span>
+      </div>
 
-  </form>
+      <div class="form-group">
+        <label for="experiencia">Experiencia profesional<span class="required">*</span></label>
+        <textarea id="experiencia" name="experiencia" placeholder="Describe brevemente tu trayectoria, logros y responsabilidades más relevantes." required></textarea>
+        <span class="error-msg" id="experiencia-error">Por favor, describe tu experiencia.</span>
+      </div>
 
-  <p>Servicio de optimización de CV y LinkedIn</p>
+      <div class="form-group">
+        <label for="habilidades">Habilidades clave</label>
+        <input type="text" id="habilidades" name="habilidades" placeholder="p. ej. Python, gestión de proyectos, liderazgo">
+      </div>
+
+      <div class="form-group">
+        <label for="idioma">Idioma del CV<span class="required">*</span></label>
+        <select id="idioma" name="idioma" required>
+          <option value="">-- Selecciona --</option>
+          <option value="es">Español</option>
+          <option value="en">Inglés</option>
+          <option value="fr">Francés</option>
+          <option value="de">Alemán</option>
+        </select>
+        <span class="error-msg" id="idioma-error">Por favor, selecciona el idioma.</span>
+      </div>
+
+      <button type="submit">Enviar</button>
+
+      <div id="success-msg">
+        ¡Gracias! Hemos recibido tu información. Nos pondremos en contacto contigo pronto.
+      </div>
+
+    </form>
+  </div>
+
+  <footer>Servicio de optimización de CV y LinkedIn &mdash; Raghib HR</footer>
+
+  <script>
+    const form = document.getElementById('cv-form');
+
+    function validateField(field) {
+      const errorEl = document.getElementById(field.id + '-error');
+      let valid = true;
+
+      if (field.hasAttribute('required') && !field.value.trim()) {
+        valid = false;
+      } else if (field.type === 'email' && field.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(field.value)) {
+        valid = false;
+      } else if (field.type === 'url' && field.value && !/^https?:\/\/.+/.test(field.value)) {
+        valid = false;
+      }
+
+      field.classList.toggle('invalid', !valid);
+      if (errorEl) errorEl.classList.toggle('visible', !valid);
+      return valid;
+    }
+
+    form.querySelectorAll('input, select, textarea').forEach(field => {
+      field.addEventListener('blur', () => validateField(field));
+      field.addEventListener('input', () => {
+        if (field.classList.contains('invalid')) validateField(field);
+      });
+    });
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      let allValid = true;
+      form.querySelectorAll('input, select, textarea').forEach(field => {
+        if (!validateField(field)) allValid = false;
+      });
+      if (allValid) {
+        form.style.display = 'none';
+        document.getElementById('success-msg').style.display = 'block';
+      }
+    });
+  </script>
 
 </body>
 </html>
