@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BRILLOPAL – Calculadora de Presupuestos</title>
+<style>
+  :root {
+    --blue-dark: #1F3864;
+    --blue-med:  #2E75B6;
+    --blue-light:#D6E4F0;
+    --gold:      #F4B942;
+    --green:     #70AD47;
+    --red:       #C00000;
+    --grey:      #F5F7FA;
+    --white:     #FFFFFF;
+    --text:      #1a1a2e;
+    --border:    #CCDDEE;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(135deg, #0F2744 0%, #1F3864 50%, #2E75B6 100%);
+    min-height: 100vh;
+    padding: 20px;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    text-align: center;
+    padding: 32px 20px 24px;
+    color: white;
+  }
+  .header h1 {
+    font-size: 2.8rem;
+    font-weight: 900;
+    letter-spacing: 4px;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.4);
+  }
+  .header h1 span { color: var(--gold); }
+  .header p {
+    font-size: 1rem;
+    opacity: 0.85;
+    margin-top: 8px;
+    letter-spacing: 1px;
+  }
+  .badge {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--blue-dark);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 3px 12px;
+    border-radius: 20px;
+    margin-top: 10px;
+    letter-spacing: 1px;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: white;
+    border-radius: 16px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  }
+  .card-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--blue-dark);
+    letter-spacing: 1px;
+    border-bottom: 3px solid var(--gold);
+    padding-bottom: 8px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+
+  /* ── GRID ── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; }
+  @media(max-width:600px) { .grid-2,.grid-3 { grid-template-columns: 1fr; } }
+
+  /* ── FORM ELEMENTS ── */
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--blue-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  select, input[type="number"], input[type="text"] {
+    padding: 10px 14px;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    color: var(--text);
+    background: var(--grey);
+    transition: border-color .2s, box-shadow .2s;
+    outline: none;
+  }
+  select:focus, input:focus {
+    border-color: var(--blue-med);
+    box-shadow: 0 0 0 3px rgba(46,117,182,0.15);
+    background: white;
+  }
+  .hint {
+    font-size: 0.72rem;
+    color: #666;
+    font-style: italic;
+  }
+
+  /* ── TOGGLE TABS ── */
+  .tabs { display: flex; gap: 0; border-radius: 10px; overflow: hidden; border: 2px solid var(--blue-dark); margin-bottom: 22px; }
+  .tab-btn {
+    flex: 1;
+    padding: 10px 16px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    transition: all .2s;
+    text-transform: uppercase;
+  }
+  .tab-btn.b2b { background: var(--blue-dark); color: white; }
+  .tab-btn.b2c { background: white; color: var(--blue-dark); }
+  .tab-btn.b2b.active { background: var(--blue-dark); color: white; }
+  .tab-btn.b2c.active { background: var(--gold); color: var(--blue-dark); }
+  .tab-btn.b2c:not(.active) { background: white; color: var(--blue-dark); }
+  .tab-btn.b2b:not(.active) { background: var(--blue-light); color: var(--blue-dark); }
+
+  /* ── RANGE SLIDER ── */
+  .slider-wrap { display: flex; align-items: center; gap: 12px; }
+  input[type="range"] {
+    flex: 1;
+    -webkit-appearance: none;
+    height: 6px;
+    border-radius: 4px;
+    background: var(--blue-light);
+    border: none;
+    padding: 0;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: var(--blue-med);
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  }
+  .slider-val {
+    min-width: 60px;
+    text-align: right;
+    font-weight: 700;
+    color: var(--blue-dark);
+    font-size: 0.95rem;
+  }
+
+  /* ── CALCULATE BUTTON ── */
+  .btn-calc {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--blue-dark), var(--blue-med));
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: transform .15s, box-shadow .15s;
+    box-shadow: 0 4px 16px rgba(31,56,100,0.4);
+  }
+  .btn-calc:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(31,56,100,0.5); }
+  .btn-calc:active { transform: translateY(0); }
+
+  /* ── RESULTS ── */
+  #results { display: none; }
+  .results-grid {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 14px;
+    margin-bottom: 22px;
+  }
+  @media(max-width:600px) { .results-grid { grid-template-columns: 1fr; } }
+
+  .metric-card {
+    background: var(--grey);
+    border-radius: 12px;
+    padding: 16px 14px;
+    text-align: center;
+    border-top: 4px solid var(--blue-dark);
+    transition: transform .2s;
+  }
+  .metric-card:hover { transform: translateY(-3px); }
+  .metric-card.gold  { border-top-color: var(--gold); }
+  .metric-card.green { border-top-color: var(--green); background: #f0f9ea; }
+  .metric-card.blue  { border-top-color: var(--blue-med); }
+
+  .metric-label {
+    font-size: 0.7rem;
+    color: #555;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+  .metric-value {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--blue-dark);
+    line-height: 1.1;
+  }
+  .metric-card.green .metric-value { color: var(--green); }
+  .metric-card.gold  .metric-value { color: #c49000; }
+  .metric-sub {
+    font-size: 0.72rem;
+    color: #777;
+    margin-top: 4px;
+  }
+
+  /* ── BREAKDOWN TABLE ── */
+  .breakdown {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 0.88rem;
+  }
+  .breakdown thead tr {
+    background: var(--blue-dark);
+    color: white;
+  }
+  .breakdown th {
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  .breakdown tbody tr { border-bottom: 1px solid var(--border); }
+  .breakdown tbody tr:nth-child(even) { background: var(--grey); }
+  .breakdown td {
+    padding: 9px 14px;
+    color: var(--text);
+  }
+  .breakdown td:last-child { text-align: right; font-weight: 600; color: var(--blue-dark); }
+  .breakdown tfoot tr { background: var(--blue-light); }
+  .breakdown tfoot td {
+    padding: 10px 14px;
+    font-weight: 700;
+    color: var(--blue-dark);
+  }
+  .breakdown tfoot td:last-child { color: var(--blue-dark); }
+  .total-row-price { background: var(--blue-dark) !important; }
+  .total-row-price td { color: white !important; font-size: 1rem; }
+
+  /* ── OFFER SUMMARY ── */
+  .offer-box {
+    border: 2px dashed var(--gold);
+    border-radius: 12px;
+    padding: 18px 20px;
+    background: #FFFBF0;
+    margin-top: 18px;
+  }
+  .offer-box p { font-size: 0.88rem; color: var(--text); line-height: 1.6; }
+  .offer-box strong { color: var(--blue-dark); }
+
+  /* ── INFO BAR ── */
+  .info-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--blue-light);
+    border-radius: 8px;
+    padding: 10px 16px;
+    margin-bottom: 18px;
+    font-size: 0.8rem;
+    color: var(--blue-dark);
+  }
+  .info-bar svg { flex-shrink: 0; }
+
+  /* ── FOOTER NOTE ── */
+  .footer-note {
+    text-align: center;
+    color: rgba(255,255,255,0.55);
+    font-size: 0.75rem;
+    padding: 10px 0 20px;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>BRILL<span>O</span>PAL</h1>
+    <p>Servicios de Limpieza, Mantenimiento y Auxiliares · Palencia</p>
+    <span class="badge">⚡ Calculadora de Presupuestos Interactiva</span>
+  </div>
+
+  <!-- CARD: Tipo de cliente -->
+  <div class="card">
+    <div class="card-title">1. Tipo de servicio</div>
+    <div class="tabs">
+      <button class="tab-btn b2b active" id="btnB2B" onclick="setMode('b2b')">
+        🏭 B2B – Empresa / Comunidad
+      </button>
+      <button class="tab-btn b2c" id="btnB2C" onclick="setMode('b2c')">
+        🏠 B2C – Hogar / Pequeña oficina
+      </button>
+    </div>
+
+    <div class="info-bar">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1F3864" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      <span id="modeInfo">B2B: precio ajustado para contratos empresariales con volumen. IVA 21% aplicable. Gestión CAE incluida.</span>
+    </div>
+
+    <div class="grid-2">
+      <div class="field">
+        <label>Tipo de instalación</label>
+        <select id="tipoInstalacion" onchange="actualizarInfo()">
+          <optgroup label="B2B">
+            <option value="nave">Nave industrial / almacén</option>
+            <option value="oficina">Oficina o despacho</option>
+            <option value="comunidad">Comunidad de propietarios</option>
+            <option value="finobra">Fin de obra / Post-construcción</option>
+            <option value="local">Local comercial</option>
+          </optgroup>
+          <optgroup label="B2C">
+            <option value="hogar">Hogar / Vivienda particular</option>
+            <option value="oficina_pequena">Oficina pequeña (&lt;150 m²)</option>
+          </optgroup>
+        </select>
+      </div>
+      <div class="field">
+        <label>Categoría del empleado</label>
+        <select id="categoria" onchange="calcular()">
+          <option value="4" data-sal="1140.44" selected>IV – Limpiador/a (estándar)</option>
+          <option value="3" data-sal="1199.95">III – Especialista (cristalero…)</option>
+          <option value="2" data-sal="1277.20">II – Encargado de Zona</option>
+          <option value="1" data-sal="1416.25">I – Encargado General</option>
+        </select>
+        <span class="hint">Salario BrillOPal (+3% s/convenio Palencia 2025)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD: Parámetros del servicio -->
+  <div class="card">
+    <div class="card-title">2. Parámetros del servicio</div>
+    <div class="grid-3">
+      <div class="field">
+        <label>Horas por visita</label>
+        <div class="slider-wrap">
+          <input type="range" id="horasVisita" min="1" max="12" step="0.5" value="4"
+                 oninput="syncSlider('horasVisita','dispHorasV'); calcular()">
+          <span class="slider-val" id="dispHorasV">4 h</span>
+        </div>
+      </div>
+      <div class="field">
+        <label>Visitas por mes</label>
+        <div class="slider-wrap">
+          <input type="range" id="visitasMes" min="1" max="31" step="1" value="20"
+                 oninput="syncSlider('visitasMes','dispVisitas'); calcular()">
+          <span class="slider-val" id="dispVisitas">20 v</span>
+        </div>
+      </div>
+      <div class="field">
+        <label>Nº de operarios</label>
+        <div class="slider-wrap">
+          <input type="range" id="numOperarios" min="1" max="6" step="1" value="1"
+                 oninput="syncSlider('numOperarios','dispOperarios'); calcular()">
+          <span class="slider-val" id="dispOperarios">1</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-top:16px">
+      <div class="field">
+        <label>Superficie aproximada (m²)</label>
+        <input type="number" id="superficie" value="200" min="10" max="10000" step="10"
+               oninput="calcular()">
+        <span class="hint">Referencial para validar la estimación de horas</span>
+      </div>
+      <div class="field">
+        <label>Nº de empleados de tu empresa (estructura)</label>
+        <select id="numEmpresaEmps" onchange="calcular()">
+          <option value="1">1 empleado</option>
+          <option value="3" selected>3 empleados ← precio objetivo</option>
+          <option value="5">5 empleados</option>
+        </select>
+        <span class="hint">Con 3 emp. el precio B2B correcto es 22,03 €/h. Con 1 emp. sería 30,84 €/h (no competitivo). Con 5 emp.: 20,26 €/h.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CALCULATE -->
+  <button class="btn-calc" onclick="calcular()">
+    ⚡ CALCULAR PRESUPUESTO
+  </button>
+
+  <!-- RESULTS -->
+  <div id="results">
+    <div class="card" style="margin-top:20px">
+      <div class="card-title">3. Resultado del presupuesto</div>
+
+      <div class="results-grid">
+        <div class="metric-card blue">
+          <div class="metric-label">Coste / hora (empresa)</div>
+          <div class="metric-value" id="resCostHora">—</div>
+          <div class="metric-sub">s/IVA · todos los costes</div>
+        </div>
+        <div class="metric-card gold">
+          <div class="metric-label">Precio venta / hora</div>
+          <div class="metric-value" id="resPvpHora">—</div>
+          <div class="metric-sub">s/IVA · margen +30% s/coste</div>
+        </div>
+        <div class="metric-card green">
+          <div class="metric-label">Beneficio / hora</div>
+          <div class="metric-value" id="resMargenHora">—</div>
+          <div class="metric-sub">30% del coste</div>
+        </div>
+        <div class="metric-card blue">
+          <div class="metric-label">Total horas / mes</div>
+          <div class="metric-value" id="resTotalHoras">—</div>
+          <div class="metric-sub">visitas × h/visita × operarios</div>
+        </div>
+        <div class="metric-card gold">
+          <div class="metric-label">Factura mensual</div>
+          <div class="metric-value" id="resFactura">—</div>
+          <div class="metric-sub">s/IVA</div>
+        </div>
+        <div class="metric-card green">
+          <div class="metric-label">Beneficio mensual contrato</div>
+          <div class="metric-value" id="resMargenMes">—</div>
+          <div class="metric-sub">bruto antes de impuestos</div>
+        </div>
+      </div>
+
+      <!-- Breakdown table -->
+      <table class="breakdown" id="breakdownTable">
+        <thead>
+          <tr>
+            <th>Concepto</th>
+            <th>Cálculo</th>
+            <th>€ / hora</th>
+          </tr>
+        </thead>
+        <tbody id="breakdownBody"></tbody>
+        <tfoot id="breakdownFoot"></tfoot>
+      </table>
+
+      <!-- Offer summary box -->
+      <div class="offer-box" id="offerBox">
+        <p id="offerText"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIABILIDAD BOX -->
+  <div class="card" style="margin-top:20px">
+    <div class="card-title">📊 Referencia rápida – Capital y viabilidad (3 empleados)</div>
+    <div style="overflow-x:auto">
+      <table class="breakdown">
+        <thead><tr>
+          <th>Escenario</th><th>Capital mínimo</th><th>Recomendado (+25%)</th>
+          <th>1er mes positivo</th><th>BEP acumulado</th><th>EBITDA año 2 (85% ocup.)</th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>A – Estructura completa</strong><br><small>Oficina 300€ + vehículo leasing 350€</small></td>
+            <td style="text-align:right;color:#C00000"><strong>13.310 €</strong></td>
+            <td style="text-align:right;color:#C00000"><strong>16.637 €</strong></td>
+            <td style="text-align:center">Mes 10</td>
+            <td style="text-align:center">&gt; Mes 18</td>
+            <td style="text-align:right">~7.700 €/año</td>
+          </tr>
+          <tr style="background:#f0f9ea">
+            <td><strong>B – Lean ★ Recomendado</strong><br><small>Home office + coche propio (ahorra 650€/mes)</small></td>
+            <td style="text-align:right;color:#70AD47"><strong>5.601 €</strong></td>
+            <td style="text-align:right;color:#70AD47"><strong>7.001 €</strong></td>
+            <td style="text-align:center">Mes 6</td>
+            <td style="text-align:center">Mes 16</td>
+            <td style="text-align:right">~18.000 €/año</td>
+          </tr>
+        </tbody>
+        <tfoot><tr>
+          <td colspan="6" style="font-size:0.8rem;color:#555;font-style:italic">
+            Contratación progresiva: M3 → 1 empleado · M7 → 2 empleados · M12 → 3 empleados.
+            Precios: B2B 22,03 €/h · B2C 22,22 €/h. EBITDA año 2 es retribución disponible del propietario antes de IRPF.
+          </td>
+        </tr></tfoot>
+      </table>
+    </div>
+  </div>
+
+  <!-- FOOTER NOTE -->
+  <p class="footer-note">
+    Convenio Colectivo Limpieza Edificios y Locales Palencia 2022-2025 (en ultraactividad 2026) ·
+    Salarios +3% BrillOPal · SS empresa 31,78% · Precios B2B: 22,03 €/h · B2C: 22,22 €/h (s/IVA 21%)
+  </p>
+</div>
+
+<script>
+// ── CONSTANTS ─────────────────────────────────────────────────────────────────
+const SS_TOTAL   = 0.3178;
+const PAGAS      = 14;
+const HOURS_YEAR = 1687.5;
+const STRUCT_MO  = 1430;
+const STRUCT_LEAN= 780;   // home office + coche propio
+const MARGIN     = 0.30;
+
+// Direct variable costs per hour
+const DIRECT = {
+  b2b: { mat: 0.40, desp: 0.25 },
+  b2c: { mat: 0.55, desp: 0.45 },
+};
+
+// Category salaries (monthly, BrillOPal +3%, Palencia conv. 2025)
+const SAL = {
+  1: 1416.25,   // I – Encargado General
+  2: 1277.20,   // II – Encargado de Zona
+  3: 1199.95,   // III – Especialista
+  4: 1140.44,   // IV – Limpiador/a (referencia principal)
+};
+
+// Installation descriptions
+const INSTALL_DESC = {
+  nave:          "Nave industrial o almacén",
+  oficina:       "Oficina o despacho",
+  comunidad:     "Comunidad de propietarios",
+  finobra:       "Fin de obra / Post-construcción",
+  local:         "Local comercial",
+  hogar:         "Hogar / Vivienda particular",
+  oficina_pequena: "Oficina pequeña (<150 m²)",
+};
+
+let mode = 'b2b';
+
+function setMode(m) {
+  mode = m;
+  document.getElementById('btnB2B').classList.toggle('active', m==='b2b');
+  document.getElementById('btnB2C').classList.toggle('active', m==='b2c');
+  document.getElementById('modeInfo').textContent = m === 'b2b'
+    ? 'B2B: precio ajustado para contratos empresariales con volumen. IVA 21% aplicable. Gestión CAE incluida.'
+    : 'B2C: servicio personalizado para hogares y pequeñas oficinas. Precio ligeramente superior por menor escala.';
+  calcular();
+}
+
+function syncSlider(id, dispId) {
+  const v = document.getElementById(id).value;
+  const unit = id === 'horasVisita' ? ' h' : id === 'visitasMes' ? ' v' : '';
+  document.getElementById(dispId).textContent = v + unit;
+}
+
+function fmt(n, decimals=2) {
+  return n.toLocaleString('es-ES', {minimumFractionDigits: decimals, maximumFractionDigits: decimals}) + ' €';
+}
+function fmtH(n) {
+  return n.toLocaleString('es-ES', {minimumFractionDigits: 1, maximumFractionDigits: 1}) + ' h';
+}
+
+function actualizarInfo() {
+  const inst = document.getElementById('tipoInstalacion').value;
+  const isB2C = ['hogar','oficina_pequena'].includes(inst);
+  if (isB2C && mode !== 'b2c') setMode('b2c');
+  if (!isB2C && mode !== 'b2b') setMode('b2b');
+  calcular();
+}
+
+function calcular() {
+  const catSel = document.getElementById('categoria');
+  const catVal = parseInt(catSel.value);
+  const salMo  = SAL[catVal];
+
+  const horasV    = parseFloat(document.getElementById('horasVisita').value);
+  const visitasM  = parseInt(document.getElementById('visitasMes').value);
+  const operarios = parseInt(document.getElementById('numOperarios').value);
+  const nEmpresa  = parseInt(document.getElementById('numEmpresaEmps').value);
+  const superficie= parseFloat(document.getElementById('superficie').value) || 200;
+  const inst      = document.getElementById('tipoInstalacion').value;
+
+  // ── Hourly labor cost ────────────────────────────────────────────────────
+  const salAnual    = salMo * PAGAS;
+  const ssBase      = salAnual / 12;               // monthly SS base
+  const ssEmpAnual  = ssBase * 12 * SS_TOTAL;
+  const totalLabor  = salAnual + ssEmpAnual;
+  const laborPerH   = totalLabor / HOURS_YEAR;
+
+  // Absenteeism (3.5% of labor, days 1-3 at employer cost)
+  const absentH = laborPerH * 0.035;
+
+  // Direct variable
+  const d = DIRECT[mode];
+  const matH  = d.mat;
+  const despH = d.desp;
+
+  // Structure per hour (per employee assigned to client, based on company total)
+  const hoursMonthPerEmp = HOURS_YEAR / 12;
+  const structPerH = STRUCT_MO / (nEmpresa * hoursMonthPerEmp);
+
+  // Total cost per hour
+  const totalCostH = laborPerH + absentH + matH + despH + structPerH;
+
+  // Price (cost + 30%)
+  const pvpH    = totalCostH * (1 + MARGIN);
+  const margenH = pvpH - totalCostH;
+
+  // Monthly figures
+  const totalHorasMes = horasV * visitasM * operarios;
+  const facturaBase   = totalHorasMes * pvpH;
+  const facturaIVA    = facturaBase * 1.21;
+  const margenMes     = totalHorasMes * margenH;
+
+  // ── Productivity hint ─────────────────────────────────────────────────────
+  const hPer100m2 = (mode === 'b2b') ? 1.5 : 2.0;   // standard ratio
+  const hEstimadas = superficie / 100 * hPer100m2 * visitasM * operarios;
+
+  // ── Render results ─────────────────────────────────────────────────────────
+  document.getElementById('results').style.display = 'block';
+  document.getElementById('resCostHora').textContent  = fmt(totalCostH);
+  document.getElementById('resPvpHora').textContent   = fmt(pvpH);
+  document.getElementById('resMargenHora').textContent = fmt(margenH);
+  document.getElementById('resTotalHoras').textContent = fmtH(totalHorasMes);
+  document.getElementById('resFactura').textContent    = fmt(facturaBase);
+  document.getElementById('resMargenMes').textContent  = fmt(margenMes);
+
+  // Breakdown table body
+  const breakRows = [
+    ['Salario bruto/hora (Cat. ' + catVal + ' +3%)', `${fmt(salAnual)} / ${HOURS_YEAR}h`, laborPerH],
+    ['SS empresa (31,78% s/base)', `${fmt(ssEmpAnual)}/año`, laborPerH * SS_TOTAL],
+    ['Provisión absentismo (3,5%)', '3,5% s/coste laboral', absentH],
+    ['Materiales y productos', mode === 'b2b' ? 'B2B (a granel)' : 'B2C (envases)', matH],
+    ['Desplazamiento / combustible', mode === 'b2b' ? 'Rutas fijas' : 'Mayor dispersión', despH],
+    [`Estructura (${STRUCT_MO}€/mes ÷ ${nEmpresa} emp.)`, `${fmt(structPerH)}/h`, structPerH],
+  ];
+
+  let bodyHTML = '';
+  breakRows.forEach(([label, calc, val]) => {
+    bodyHTML += `<tr>
+      <td>${label}</td>
+      <td style="color:#555;font-size:0.82rem">${calc}</td>
+      <td>${fmt(val)}</td>
+    </tr>`;
+  });
+  document.getElementById('breakdownBody').innerHTML = bodyHTML;
+
+  document.getElementById('breakdownFoot').innerHTML = `
+    <tr>
+      <td colspan="2"><strong>COSTE TOTAL / HORA</strong></td>
+      <td><strong>${fmt(totalCostH)}</strong></td>
+    </tr>
+    <tr class="total-row-price" style="background:#1F3864">
+      <td colspan="2" style="color:white;font-weight:700;font-size:1rem">
+        💰 PRECIO DE VENTA / HORA (+30%) &nbsp;→&nbsp; con IVA: ${fmt(pvpH*1.21)}
+      </td>
+      <td style="color:#F4B942;font-weight:900;font-size:1.05rem">${fmt(pvpH)}</td>
+    </tr>
+    <tr style="background:#f0f9ea">
+      <td colspan="2" style="color:#3a7a1e;font-weight:700">✅ BENEFICIO / HORA</td>
+      <td style="color:#70AD47;font-weight:700">${fmt(margenH)}</td>
+    </tr>
+  `;
+
+  // Productivity hint
+  const hintStatus = Math.abs(hEstimadas - totalHorasMes) / totalHorasMes;
+  const hintMsg = hintStatus > 0.3
+    ? `⚠️ Estimación por superficie: ~${fmtH(hEstimadas)}/mes. Revisa horas/visita si difiere mucho.`
+    : `✅ Las horas estimadas por superficie (~${fmtH(hEstimadas)}/mes) son coherentes con tu configuración.`;
+
+  // Offer text
+  const catName = catSel.options[catSel.selectedIndex].text;
+  const freqLabel = visitasM >= 20 ? 'diaria (L-V)' : visitasM >= 8 ? 'semanal' : visitasM >= 4 ? 'quincenal' : 'mensual/puntual';
+  document.getElementById('offerText').innerHTML = `
+    <strong>Resumen del servicio a presupuestar:</strong><br>
+    Tipo de instalación: <strong>${INSTALL_DESC[inst]}</strong> · Superficie: <strong>${superficie} m²</strong><br>
+    Categoría profesional: <strong>${catName}</strong> · ${operarios} operario(s) · ${visitasM} visitas/mes (frecuencia ${freqLabel}) · ${horasV}h/visita<br>
+    Total horas mensuales: <strong>${fmtH(totalHorasMes)}</strong> · Precio/hora s/IVA: <strong>${fmt(pvpH)}</strong><br>
+    <strong>Factura mensual s/IVA: ${fmt(facturaBase)}</strong> &nbsp;|&nbsp;
+    <strong>Con IVA (21%): ${fmt(facturaIVA)}</strong> &nbsp;|&nbsp;
+    <strong style="color:#70AD47">Beneficio mensual del contrato: ${fmt(margenMes)}</strong><br>
+    <small style="color:#666">${hintMsg}</small>
+  `;
+
+  // Scroll to results
+  document.getElementById('results').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+// Init
+window.onload = () => {
+  syncSlider('horasVisita','dispHorasV');
+  syncSlider('visitasMes','dispVisitas');
+  syncSlider('numOperarios','dispOperarios');
+  calcular();
+};
+</script>
+</body>
+</html>
