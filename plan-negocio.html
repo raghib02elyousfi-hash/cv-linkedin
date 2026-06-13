@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Plan de Negocio · Formaciones de Fomento al Empleo · Raghib HR</title>
+  <style>
+    :root {
+      --primary: #1a3c5e;
+      --accent:  #e8a020;
+      --green:   #28a878;
+      --red:     #e84040;
+      --purple:  #7c4dff;
+      --light:   #f4f7fb;
+      --text:    #1e2d3d;
+      --muted:   #6b7f95;
+      --white:   #ffffff;
+      --radius:  10px;
+      --shadow:  0 4px 18px rgba(0,0,0,.09);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; color: var(--text); background: var(--light); line-height: 1.7; }
+
+    /* NAV */
+    nav {
+      background: var(--primary); color: var(--white);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5%; height: 60px; position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 10px rgba(0,0,0,.25);
+    }
+    .nav-logo { font-size: 1.1rem; font-weight: 700; }
+    .nav-logo span { color: var(--accent); }
+    .back-link { color: rgba(255,255,255,.8); text-decoration: none; font-size: .88rem; display: flex; align-items: center; gap: .4rem; }
+    .back-link:hover { color: var(--accent); }
+
+    /* HEADER */
+    .plan-header {
+      background: linear-gradient(135deg, var(--primary) 55%, #1e5080);
+      color: var(--white); padding: 70px 5% 60px; text-align: center;
+    }
+    .plan-header .tag {
+      display: inline-block; background: var(--accent); color: var(--white);
+      font-size: .75rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+      padding: .3rem .9rem; border-radius: 50px; margin-bottom: 1.2rem;
+    }
+    .plan-header h1 { font-size: clamp(1.7rem, 3.5vw, 2.6rem); font-weight: 800; line-height: 1.2; max-width: 700px; margin: 0 auto .8rem; }
+    .plan-header h1 em { color: var(--accent); font-style: normal; }
+    .plan-header p { opacity: .85; max-width: 580px; margin: 0 auto; font-size: 1.05rem; }
+
+    /* LAYOUT */
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 5%; }
+    section { padding: 64px 0; }
+    section + section { border-top: 1px solid #dde6f0; }
+
+    h2 {
+      font-size: 1.6rem; font-weight: 800; color: var(--primary);
+      margin-bottom: 1.5rem; display: flex; align-items: center; gap: .7rem;
+    }
+    h2 .icon { font-size: 1.4rem; }
+    h3 { font-size: 1.1rem; font-weight: 700; color: var(--primary); margin-bottom: .6rem; }
+    p { color: var(--muted); margin-bottom: .8rem; }
+    p:last-child { margin-bottom: 0; }
+
+    /* COMPATIBILITY SCORE */
+    .compat-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.2rem; margin-top: 1.5rem;
+    }
+    .compat-card {
+      background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow);
+      padding: 1.5rem; text-align: center;
+    }
+    .compat-score {
+      font-size: 2.2rem; font-weight: 900; margin-bottom: .4rem;
+    }
+    .compat-score.alta { color: var(--green); }
+    .compat-score.media { color: var(--accent); }
+    .compat-card p { font-size: .85rem; }
+
+    /* RADAR CHART (CSS) */
+    .radar-wrap {
+      background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow);
+      padding: 2rem; margin-top: 1.5rem;
+    }
+    .skill-bars { display: flex; flex-direction: column; gap: .9rem; }
+    .skill-bar { display: grid; grid-template-columns: 200px 1fr 40px; align-items: center; gap: 1rem; }
+    .skill-bar label { font-size: .88rem; font-weight: 600; color: var(--text); }
+    .bar-track { background: #e8eef5; border-radius: 50px; height: 10px; overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: 50px; background: linear-gradient(90deg, var(--primary), var(--accent)); }
+    .bar-pct { font-size: .82rem; font-weight: 700; color: var(--accent); text-align: right; }
+
+    /* CLIENTES */
+    .clientes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.4rem; margin-top: 1.5rem; }
+    .cliente-card {
+      background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow);
+      padding: 1.8rem; border-left: 5px solid var(--primary);
+    }
+    .cliente-card.c1 { border-color: #2a7ade; }
+    .cliente-card.c2 { border-color: var(--accent); }
+    .cliente-card.c3 { border-color: var(--green); }
+    .cliente-card.c4 { border-color: var(--purple); }
+    .cliente-card.c5 { border-color: #e84040; }
+    .cliente-badge {
+      display: inline-block; font-size: .7rem; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; padding: .2rem .7rem; border-radius: 50px; margin-bottom: .8rem;
+    }
+    .c1 .cliente-badge { background: #e8f0fc; color: #2a7ade; }
+    .c2 .cliente-badge { background: #fff3e0; color: #c98510; }
+    .c3 .cliente-badge { background: #e6f7f0; color: #28a878; }
+    .c4 .cliente-badge { background: #ede7ff; color: #7c4dff; }
+    .c5 .cliente-badge { background: #fdeaea; color: #e84040; }
+    .cliente-card h3 { margin-bottom: .4rem; }
+    .need-list { list-style: none; margin-top: .8rem; display: flex; flex-direction: column; gap: .4rem; }
+    .need-list li { font-size: .85rem; color: var(--muted); display: flex; align-items: flex-start; gap: .5rem; }
+    .need-list li::before { content: '→'; color: var(--accent); font-weight: 700; flex-shrink: 0; }
+    .ticket { margin-top: 1rem; font-size: .82rem; font-weight: 700; color: var(--green); background: #e6f7f0; padding: .3rem .8rem; border-radius: 50px; display: inline-block; }
+
+    /* PLAN DE ACCIÓN */
+    .phases { display: flex; flex-direction: column; gap: 1.5rem; margin-top: 1.5rem; }
+    .phase {
+      background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow);
+      padding: 1.8rem; display: grid; grid-template-columns: 120px 1fr; gap: 1.5rem; align-items: start;
+    }
+    .phase-num {
+      text-align: center;
+    }
+    .phase-num .num {
+      display: block; font-size: 2.5rem; font-weight: 900; color: var(--accent); line-height: 1;
+    }
+    .phase-num .period {
+      display: block; font-size: .75rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-top: .3rem;
+    }
+    .phase-content h3 { color: var(--primary); margin-bottom: .8rem; }
+    .task-list { list-style: none; display: flex; flex-direction: column; gap: .5rem; }
+    .task-list li {
+      font-size: .88rem; color: var(--text); display: flex; align-items: flex-start; gap: .6rem; padding: .4rem .6rem; border-radius: 6px; background: var(--light);
+    }
+    .task-list li .chk { color: var(--green); font-weight: 700; flex-shrink: 0; }
+    .kpi-row { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 1rem; }
+    .kpi { font-size: .78rem; font-weight: 700; padding: .25rem .7rem; border-radius: 50px; background: #fff3e0; color: #c98510; }
+
+    /* FINANCIERO */
+    .fin-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.4rem; margin-top: 1.5rem; }
+    .fin-card {
+      background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow);
+      padding: 1.6rem; text-align: center;
+    }
+    .fin-card .amount { font-size: 1.8rem; font-weight: 900; margin: .5rem 0; }
+    .fin-card .label { font-size: .82rem; color: var(--muted); }
+    .fin-card.inversion .amount { color: var(--red); }
+    .fin-card.ingresos .amount { color: var(--green); }
+    .fin-card.beneficio .amount { color: var(--accent); }
+
+    .revenue-table { width: 100%; border-collapse: collapse; margin-top: 1.5rem; background: var(--white); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+    .revenue-table th { background: var(--primary); color: var(--white); padding: .8rem 1rem; text-align: left; font-size: .85rem; }
+    .revenue-table td { padding: .75rem 1rem; font-size: .88rem; border-bottom: 1px solid #e8eef5; }
+    .revenue-table tr:last-child td { border-bottom: none; font-weight: 700; background: #f9fbfd; }
+    .revenue-table td:nth-child(3), .revenue-table td:nth-child(4) { color: var(--green); font-weight: 600; }
+    .revenue-table td:last-child { color: var(--accent); font-weight: 800; }
+
+    /* VIABILIDAD */
+    .viab-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1.5rem; }
+    .viab-box { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow); padding: 1.8rem; }
+    .viab-box h3 { margin-bottom: 1rem; font-size: 1rem; }
+    .viab-list { list-style: none; display: flex; flex-direction: column; gap: .6rem; }
+    .viab-list li { font-size: .87rem; color: var(--text); display: flex; align-items: flex-start; gap: .6rem; }
+    .viab-list li .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 6px; }
+    .dot.green { background: var(--green); }
+    .dot.red   { background: var(--red); }
+    .dot.amber { background: var(--accent); }
+
+    .verdict {
+      background: linear-gradient(135deg, var(--primary), #1e5080);
+      color: var(--white); border-radius: var(--radius); padding: 2.5rem; text-align: center;
+      margin-top: 1.5rem;
+    }
+    .verdict .score { font-size: 4rem; font-weight: 900; color: var(--accent); line-height: 1; }
+    .verdict h3 { font-size: 1.4rem; font-weight: 800; margin: .5rem 0; }
+    .verdict p { opacity: .85; max-width: 560px; margin: 0 auto; }
+
+    /* DIFERENCIACIÓN */
+    .diff-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1.2rem; margin-top: 1.5rem; }
+    .diff-card {
+      background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow);
+      padding: 1.5rem; border-top: 3px solid var(--accent);
+    }
+    .diff-card .icon { font-size: 1.8rem; margin-bottom: .6rem; }
+    .diff-card h4 { font-size: .95rem; font-weight: 700; color: var(--primary); margin-bottom: .4rem; }
+    .diff-card p { font-size: .83rem; }
+
+    /* CANALES */
+    .canales-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.3rem; margin-top: 1.5rem; }
+    .canal { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow); padding: 1.5rem; }
+    .canal h4 { font-size: .95rem; font-weight: 700; color: var(--primary); margin-bottom: .5rem; display: flex; align-items: center; gap: .5rem; }
+    .canal p { font-size: .84rem; }
+    .priority { font-size: .7rem; font-weight: 700; padding: .15rem .5rem; border-radius: 50px; margin-left: auto; }
+    .prio-alta   { background: #e6f7f0; color: var(--green); }
+    .prio-media  { background: #fff3e0; color: #c98510; }
+
+    /* CTA FINAL */
+    .cta-final {
+      background: var(--accent); color: var(--white); padding: 3rem 5%; text-align: center;
+    }
+    .cta-final h2 { color: var(--white); font-size: 1.7rem; justify-content: center; border: none; }
+    .cta-final p { color: rgba(255,255,255,.9); max-width: 540px; margin: .6rem auto 1.8rem; }
+    .cta-final a {
+      display: inline-block; background: var(--white); color: var(--accent);
+      font-weight: 800; padding: .9rem 2.2rem; border-radius: var(--radius); text-decoration: none;
+      font-size: 1rem; transition: transform .15s;
+    }
+    .cta-final a:hover { transform: translateY(-2px); }
+
+    footer {
+      background: var(--primary); color: rgba(255,255,255,.6);
+      text-align: center; padding: 2rem 5%; font-size: .82rem;
+    }
+    footer strong { color: var(--white); }
+
+    @media (max-width: 768px) {
+      .fin-grid { grid-template-columns: 1fr; }
+      .viab-grid { grid-template-columns: 1fr; }
+      .phase { grid-template-columns: 1fr; }
+      .skill-bar { grid-template-columns: 1fr; }
+      .skill-bar label { margin-bottom: .2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Raghib <span>HR</span></div>
+  <a href="index.html" class="back-link">&#8592; Volver a Formaciones</a>
+</nav>
+
+<div class="plan-header">
+  <div class="tag">&#128203; Plan de Negocio 2026</div>
+  <h1>An&aacute;lisis y Viabilidad:<br><em>Formaciones de Fomento al Empleo</em></h1>
+  <p>Evaluaci&oacute;n completa de la idea, plan de lanzamiento, perfil de clientes y proyecci&oacute;n financiera para el negocio aut&oacute;nomo en Espa&ntilde;a.</p>
+</div>
+
+<div style="background:var(--white);">
+<div class="container">
+
+<!-- 1. COMPATIBILIDAD CON TU FORMACIÓN -->
+<section>
+  <h2><span class="icon">&#127919;</span> 1. Compatibilidad con tu Formaci&oacute;n en RRHH</h2>
+  <p>Un perfil de <strong>Recursos Humanos</strong> es uno de los m&aacute;s completos para este negocio. No es solo compatible &mdash; es la formaci&oacute;n <em>id&oacute;nea</em>. Estas son las habilidades que ya tienes y que directamente monetizas:</p>
+
+  <div class="radar-wrap">
+    <div class="skill-bars">
+      <div class="skill-bar">
+        <label>Selecci&oacute;n y reclutamiento</label>
+        <div class="bar-track"><div class="bar-fill" style="width:95%"></div></div>
+        <span class="bar-pct">95%</span>
+      </div>
+      <div class="skill-bar">
+        <label>Optimizaci&oacute;n de CV y LinkedIn</label>
+        <div class="bar-track"><div class="bar-fill" style="width:92%"></div></div>
+        <span class="bar-pct">92%</span>
+      </div>
+      <div class="skill-bar">
+        <label>Coaching de entrevistas</label>
+        <div class="bar-track"><div class="bar-fill" style="width:88%"></div></div>
+        <span class="bar-pct">88%</span>
+      </div>
+      <div class="skill-bar">
+        <label>Orientaci&oacute;n profesional</label>
+        <div class="bar-track"><div class="bar-fill" style="width:90%"></div></div>
+        <span class="bar-pct">90%</span>
+      </div>
+      <div class="skill-bar">
+        <label>Mercado laboral espa&ntilde;ol</label>
+        <div class="bar-track"><div class="bar-fill" style="width:85%"></div></div>
+        <span class="bar-pct">85%</span>
+      </div>
+      <div class="skill-bar">
+        <label>Psicolog&iacute;a organizacional</label>
+        <div class="bar-track"><div class="bar-fill" style="width:80%"></div></div>
+        <span class="bar-pct">80%</span>
+      </div>
+      <div class="skill-bar">
+        <label>Dise&ntilde;o de formaciones</label>
+        <div class="bar-track"><div class="bar-fill" style="width:75%"></div></div>
+        <span class="bar-pct">75%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="compat-grid" style="margin-top:1.8rem;">
+    <div class="compat-card">
+      <div class="compat-score alta">9.2/10</div>
+      <h3>Compatibilidad Global</h3>
+      <p>Tu formaci&oacute;n cubre directamente el 85% del contenido de los talleres sin necesidad de estudios adicionales.</p>
+    </div>
+    <div class="compat-card">
+      <div class="compat-score alta">Alta</div>
+      <h3>Credibilidad de Partida</h3>
+      <p>Un profesional de RRHH que explica c&oacute;mo piensan los reclutadores genera confianza inmediata en los participantes.</p>
+    </div>
+    <div class="compat-card">
+      <div class="compat-score media">Media</div>
+      <h3>Brecha a cubrir</h3>
+      <p>Profundizar en psicolog&iacute;a del empleo y en marco legal de aut&oacute;nomos. Ambos resolubles con formaci&oacute;n de 40-60h.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 2. CLIENTES -->
+<section>
+  <h2><span class="icon">&#128101;</span> 2. Perfil de Clientes &mdash; Qui&eacute;nes te van a pagar</h2>
+  <p>Hay cinco arquetipos de cliente claramente definidos. Los dos primeros son los m&aacute;s r&aacute;pidos de activar; los tres &uacute;ltimos son los de mayor ticket y estabilidad.</p>
+
+  <div class="clientes-grid">
+
+    <div class="cliente-card c1">
+      <span class="cliente-badge">&#128101; Cliente 1</span>
+      <h3>Persona en B&uacute;squeda Activa</h3>
+      <p>Desempleados, j&oacute;venes titulados sin experiencia, personas en reconversi&oacute;n profesional o mayores de 45 a&ntilde;os re-entrando al mercado.</p>
+      <ul class="need-list">
+        <li>No sabe c&oacute;mo usar LinkedIn eficazmente</li>
+        <li>Su CV lleva a&ntilde;os sin actualizarse</li>
+        <li>Se siente invisible en el mercado laboral</li>
+        <li>Necesita orientaci&oacute;n y motivaci&oacute;n</li>
+      </ul>
+      <span class="ticket">&#128176; 45-280 &euro; por participante</span>
+    </div>
+
+    <div class="cliente-card c2">
+      <span class="cliente-badge">&#127970; Cliente 2</span>
+      <h3>Empresa en Proceso de ERE / Outplacement</h3>
+      <p>Compa&ntilde;&iacute;as que han hecho regulaciones de empleo y necesitan ofrecer formaci&oacute;n de recolocaci&oacute;n a los trabajadores afectados (obligaci&oacute;n legal en EREs +50 personas).</p>
+      <ul class="need-list">
+        <li>Obligaci&oacute;n legal de acompa&ntilde;amiento en ERE</li>
+        <li>Necesitan proveedor &aacute;gil y personalizado</li>
+        <li>Valoran discrecci&oacute;n y rapidez de despliegue</li>
+      </ul>
+      <span class="ticket">&#128176; 900-3.500 &euro; por contrato</span>
+    </div>
+
+    <div class="cliente-card c3">
+      <span class="cliente-badge">&#127970; Cliente 3</span>
+      <h3>Entidades P&uacute;blicas y SPE</h3>
+      <p>Servicios P&uacute;blicos de Empleo auton&oacute;micos (SOC, SEPE, LABORA, INAEM&hellip;), ayuntamientos, diputaciones y consorcios de desarrollo local.</p>
+      <ul class="need-list">
+        <li>Convocan licitaciones y subvenciones peri&oacute;dicas</li>
+        <li>Buscan formadores acreditados y flexibles</li>
+        <li>Financiaci&oacute;n p&uacute;blica = mayor presupuesto</li>
+      </ul>
+      <span class="ticket">&#128176; Contratos de 5.000-25.000 &euro;/a&ntilde;o</span>
+    </div>
+
+    <div class="cliente-card c4">
+      <span class="cliente-badge">&#128161; Cliente 4</span>
+      <h3>Fundaciones y ONG Sociales</h3>
+      <p>C&aacute;ritas, Cruz Roja, F&uacute;nda&ccedil;&atilde;o, Fundaci&oacute;n Secretariado Gitano, Accem, Fundaci&oacute;n Adecco. Trabajan con colectivos vulnerables e integran la formaci&oacute;n laboral en sus programas.</p>
+      <ul class="need-list">
+        <li>Colectivos en riesgo de exclusi&oacute;n</li>
+        <li>Personas migrantes en proceso de inserci&oacute;n</li>
+        <li>J&oacute;venes sin cualificaci&oacute;n (NEET)</li>
+      </ul>
+      <span class="ticket">&#128176; 1.500-8.000 &euro; por programa</span>
+    </div>
+
+    <div class="cliente-card c5">
+      <span class="cliente-badge">&#127979; Cliente 5</span>
+      <h3>Universidades y Colegios Profesionales</h3>
+      <p>Servicios de orientaci&oacute;n universitaria (COIE), asociaciones de alumni, colegios profesionales (psic&oacute;logos, abogados, ingenieros) que ofrecen valor a&ntilde;adido a sus miembros.</p>
+      <ul class="need-list">
+        <li>Bolsas de empleo que necesitan formaci&oacute;n complementaria</li>
+        <li>Demanda de talleres de salida profesional</li>
+        <li>Convenios anuales renovables</li>
+      </ul>
+      <span class="ticket">&#128176; 500-2.000 &euro; por taller</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- 3. PLAN DE ACCIÓN -->
+<section>
+  <h2><span class="icon">&#128640;</span> 3. Plan de Acci&oacute;n &mdash; Primeros 12 meses</h2>
+  <p>Un plan realista dividido en cuatro fases que minimiza el riesgo y construye reputaci&oacute;n antes de escalar.</p>
+
+  <div class="phases">
+
+    <div class="phase">
+      <div class="phase-num">
+        <span class="num">01</span>
+        <span class="period">Meses 1-2</span>
+      </div>
+      <div class="phase-content">
+        <h3>&#128295; Cimientos: Alta, Marca y Primer Contenido</h3>
+        <ul class="task-list">
+          <li><span class="chk">&#10003;</span> Alta como aut&oacute;nomo en RETA (tarifa plana 80 &euro;/mes el primer a&ntilde;o)</li>
+          <li><span class="chk">&#10003;</span> Acreditaci&oacute;n como formador SSCE0110 o equivalente en tu comunidad</li>
+          <li><span class="chk">&#10003;</span> Crear el primer taller piloto (CV + LinkedIn, 6h) y testarlo gratis con 5-8 personas del entorno</li>
+          <li><span class="chk">&#10003;</span> Optimizar perfil LinkedIn con m&aacute;s de 500 conexiones y publicar contenido semanal</li>
+          <li><span class="chk">&#10003;</span> Grabar 3 v&iacute;deos cortos (tips de CV, LinkedIn, entrevistas) para redes sociales</li>
+          <li><span class="chk">&#10003;</span> Lanzar p&aacute;gina web con formulario de contacto (ya tienes la base)</li>
+        </ul>
+        <div class="kpi-row">
+          <span class="kpi">KPI: 1 taller piloto completado</span>
+          <span class="kpi">KPI: 3 testimonios reales</span>
+          <span class="kpi">KPI: Alta aut&oacute;nomo</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-num">
+        <span class="num">02</span>
+        <span class="period">Meses 3-4</span>
+      </div>
+      <div class="phase-content">
+        <h3>&#127919; Primeros Clientes de Pago y Validaci&oacute;n</h3>
+        <ul class="task-list">
+          <li><span class="chk">&#10003;</span> Contactar 20 ayuntamientos y centros de empleo locales ofreciendo taller gratuito o bonificado</li>
+          <li><span class="chk">&#10003;</span> Lanzar primer taller de pago online (m&iacute;nimo 10 participantes &times; 45 &euro;)</li>
+          <li><span class="chk">&#10003;</span> Ofrecer 3 sesiones de mentor&iacute;a individual 1:1 a precio de lanzamiento (80 &euro;/sesi&oacute;n)</li>
+          <li><span class="chk">&#10003;</span> Unirse a grupos de LinkedIn de orientaci&oacute;n laboral y RRHH para visibilidad</li>
+          <li><span class="chk">&#10003;</span> Solicitar inscripci&oacute;n en INEM/SEPE como entidad colaboradora</li>
+          <li><span class="chk">&#10003;</span> Preparar dossier comercial profesional en PDF</li>
+        </ul>
+        <div class="kpi-row">
+          <span class="kpi">KPI: 500 &euro; primer ingreso</span>
+          <span class="kpi">KPI: 15 contactos institucionales</span>
+          <span class="kpi">KPI: 1 contrato firmado</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-num">
+        <span class="num">03</span>
+        <span class="period">Meses 5-8</span>
+      </div>
+      <div class="phase-content">
+        <h3>&#128200; Escalar: Itinerante + Contratos Institucionales</h3>
+        <ul class="task-list">
+          <li><span class="chk">&#10003;</span> Impartir formaciones en 3-5 provincias distintas (modelo itinerante)</li>
+          <li><span class="chk">&#10003;</span> Presentarse a convocatorias p&uacute;blicas de empleo de al menos 2 comunidades aut&oacute;nomas</li>
+          <li><span class="chk">&#10003;</span> Cerrar convenio con 1 fundaci&oacute;n o entidad social</li>
+          <li><span class="chk">&#10003;</span> Lanzar suscripci&oacute;n mensual online (29 &euro;/mes) con contenidos exclusivos</li>
+          <li><span class="chk">&#10003;</span> Crear curso grabado (CV + LinkedIn) para venta pasiva en Udemy o plataforma propia</li>
+          <li><span class="chk">&#10003;</span> Contratar gestor&iacute;a para facturas y optimizaci&oacute;n fiscal (~50 &euro;/mes)</li>
+        </ul>
+        <div class="kpi-row">
+          <span class="kpi">KPI: 1.500 &euro;/mes ingresos recurrentes</span>
+          <span class="kpi">KPI: 5 provincias activas</span>
+          <span class="kpi">KPI: 30 suscriptores</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-num">
+        <span class="num">04</span>
+        <span class="period">Meses 9-12</span>
+      </div>
+      <div class="phase-content">
+        <h3>&#127775; Consolidaci&oacute;n y M&uacute;ltiples Fuentes de Ingreso</h3>
+        <ul class="task-list">
+          <li><span class="chk">&#10003;</span> Llegar a ingresos regulares de 2.500-3.500 &euro;/mes combinando todos los canales</li>
+          <li><span class="chk">&#10003;</span> Incorporar un co-formador colaborador para cubrir m&aacute;s territorio</li>
+          <li><span class="chk">&#10003;</span> Presentar propuesta in-company a 5 empresas (previo ERE o en proceso)</li>
+          <li><span class="chk">&#10003;</span> Publicar e-book o gu&iacute;a de b&uacute;squeda de empleo (ingreso pasivo, 9-19 &euro;)</li>
+          <li><span class="chk">&#10003;</span> Solicitar homologaci&oacute;n FUNDAE para ofrecer formaci&oacute;n bonificada a empresas</li>
+          <li><span class="chk">&#10003;</span> Evaluar si el volumen justifica pasar a SL o mantener aut&oacute;nomo</li>
+        </ul>
+        <div class="kpi-row">
+          <span class="kpi">KPI: 3.000 &euro;/mes objetivo</span>
+          <span class="kpi">KPI: 1 contrato in-company</span>
+          <span class="kpi">KPI: FUNDAE homologado</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- 4. PROYECCIÓN FINANCIERA -->
+<section>
+  <h2><span class="icon">&#128176;</span> 4. Proyecci&oacute;n Financiera &mdash; A&ntilde;o 1</h2>
+  <p>Escenario <strong>conservador</strong> basado en dedicaci&oacute;n a tiempo completo desde el mes 3. Los primeros dos meses son de preparaci&oacute;n y generan ingresos m&iacute;nimos.</p>
+
+  <div class="fin-grid">
+    <div class="fin-card inversion">
+      <div class="label">Inversi&oacute;n inicial estimada</div>
+      <div class="amount">800 &euro;</div>
+      <p style="font-size:.78rem">Web, dise&ntilde;o, acreditaci&oacute;n, materiales, gestor&iacute;a mes 1. Sin oficina, sin inventario.</p>
+    </div>
+    <div class="fin-card ingresos">
+      <div class="label">Ingresos proyectados a&ntilde;o 1</div>
+      <div class="amount">22.400 &euro;</div>
+      <p style="font-size:.78rem">Combinando talleres, mentor&iacute;a, contratos institucionales y productos digitales.</p>
+    </div>
+    <div class="fin-card beneficio">
+      <div class="label">Beneficio neto estimado a&ntilde;o 1</div>
+      <div class="amount">~15.000 &euro;</div>
+      <p style="font-size:.78rem">Descontando cuota aut&oacute;nomo, gestor&iacute;a, desplazamientos y herramientas digitales.</p>
+    </div>
+  </div>
+
+  <table class="revenue-table">
+    <thead>
+      <tr>
+        <th>Fuente de ingresos</th>
+        <th>Precio unitario</th>
+        <th>Unidades/mes (mes 6)</th>
+        <th>Ingreso mensual</th>
+        <th>% del total</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Talleres grupales (10 pers.)</td>
+        <td>45 &euro; / persona</td>
+        <td>2 talleres</td>
+        <td>900 &euro;</td>
+        <td>30%</td>
+      </tr>
+      <tr>
+        <td>Mentor&iacute;a individual (packs)</td>
+        <td>280 &euro; / mes</td>
+        <td>5 clientes</td>
+        <td>1.400 &euro;</td>
+        <td>47%</td>
+      </tr>
+      <tr>
+        <td>Suscripci&oacute;n online</td>
+        <td>29 &euro; / mes</td>
+        <td>30 suscriptores</td>
+        <td>870 &euro;</td>
+        <td>29%</td>
+      </tr>
+      <tr>
+        <td>Productos digitales (e-book, curso)</td>
+        <td>15 &euro; medio</td>
+        <td>15 ventas</td>
+        <td>225 &euro;</td>
+        <td>8%</td>
+      </tr>
+      <tr>
+        <td>Contratos institucionales (prorrata)</td>
+        <td>Variable</td>
+        <td>1 contrato activo</td>
+        <td>600 &euro;</td>
+        <td>20%</td>
+      </tr>
+      <tr>
+        <td><strong>TOTAL mes 6 (objetivo)</strong></td>
+        <td></td>
+        <td></td>
+        <td><strong>~3.000 &euro;</strong></td>
+        <td><strong>100%</strong></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p style="margin-top:1rem;font-size:.83rem;">
+    &#128204; <strong>Gastos fijos mensuales estimados:</strong> Cuota RETA &sim;310 &euro; &middot; Gestor&iacute;a 50 &euro; &middot; Herramientas digitales 60 &euro; &middot; Desplazamientos 150 &euro; <strong>= &sim;570 &euro;/mes</strong>
+  </p>
+</section>
+
+<!-- 5. ANÁLISIS DAFO -->
+<section>
+  <h2><span class="icon">&#9878;&#65039;</span> 5. An&aacute;lisis de Viabilidad &mdash; DAFO</h2>
+
+  <div class="viab-grid">
+    <div class="viab-box">
+      <h3>&#128994; Fortalezas</h3>
+      <ul class="viab-list">
+        <li><div class="dot green"></div>Formaci&oacute;n en RRHH = autoridad natural y credibilidad inmediata</li>
+        <li><div class="dot green"></div>Bajo coste de entrada (&lt;800 &euro; de inversi&oacute;n inicial)</li>
+        <li><div class="dot green"></div>M&uacute;ltiples fuentes de ingreso que reducen dependencia de un solo cliente</li>
+        <li><div class="dot green"></div>Modelo geogr&aacute;ficamente ilimitado (presencial + online)</li>
+        <li><div class="dot green"></div>Alta demanda estructural: Espa&ntilde;a con tasa de paro >11%</li>
+        <li><div class="dot green"></div>Posibilidad de formaci&oacute;n bonificada (FUNDAE) como ventaja competitiva</li>
+      </ul>
+    </div>
+    <div class="viab-box">
+      <h3>&#128308; Debilidades</h3>
+      <ul class="viab-list">
+        <li><div class="dot red"></div>Los primeros 3 meses los ingresos ser&aacute;n bajos o nulos &mdash; necesitas colch&oacute;n econ&oacute;mico</li>
+        <li><div class="dot red"></div>Sin cartera de clientes inicial, la captaci&oacute;n requiere tiempo y esfuerzo</li>
+        <li><div class="dot red"></div>Acreditaci&oacute;n como formador puede tardar 1-3 meses seg&uacute;n comunidad aut&oacute;noma</li>
+        <li><div class="dot red"></div>Ingresos variables mes a mes hasta tener contratos recurrentes</li>
+        <li><div class="dot red"></div>El modelo itinerante tiene costes de desplazamiento que reducen margen</li>
+      </ul>
+    </div>
+    <div class="viab-box">
+      <h3>&#128992; Oportunidades</h3>
+      <ul class="viab-list">
+        <li><div class="dot amber"></div>Crecimiento del modelo h&iacute;brido: las empresas buscan formaciones online post-pandemia</li>
+        <li><div class="dot amber"></div>Fondos europeos (FSE+) financian programas de inserci&oacute;n laboral hasta 2027</li>
+        <li><div class="dot amber"></div>Alta rotaci&oacute;n laboral = personas en transici&oacute;n de carrera continuamente</li>
+        <li><div class="dot amber"></div>Auge del trabajo aut&oacute;nomo: +4M de aut&oacute;nomos en Espa&ntilde;a, muchos necesitan orientaci&oacute;n</li>
+        <li><div class="dot amber"></div>Poco formador especializado en la intersecci&oacute;n RRHH + psicolog&iacute;a del empleo</li>
+        <li><div class="dot amber"></div>EREs en sectores en transformaci&oacute;n (banca, industria, comercio) = demanda de outplacement</li>
+      </ul>
+    </div>
+    <div class="viab-box">
+      <h3>&#128308; Amenazas</h3>
+      <ul class="viab-list">
+        <li><div class="dot red"></div>Competencia de grandes consultoras de outplacement (Lee Hecht, Adecco, Randstad)</li>
+        <li><div class="dot red"></div>Plataformas de e-learning gratuitas (YouTube, Coursera) que ofrecen contenido parecido</li>
+        <li><div class="dot red"></div>Cambios en pol&iacute;tica p&uacute;blica de empleo que afecten presupuestos</li>
+        <li><div class="dot red"></div>Dependencia de contratos institucionales con ciclos de licitaci&oacute;n lentos</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="verdict">
+    <div class="score">8.4/10</div>
+    <h3>Viabilidad: MUY ALTA</h3>
+    <p>La combinaci&oacute;n de baja inversi&oacute;n inicial, alta demanda estructural, m&uacute;ltiples fuentes de ingreso y tu formaci&oacute;n en RRHH hacen de esta idea un negocio s&oacute;lido y sostenible. El riesgo principal est&aacute; en los primeros 3 meses, gestionable con un colch&oacute;n de 3.000-4.000 &euro;.</p>
+  </div>
+</section>
+
+<!-- 6. DIFERENCIACIÓN -->
+<section>
+  <h2><span class="icon">&#128081;</span> 6. Tu Diferenciaci&oacute;n: Por qu&eacute; te elegir&aacute;n a ti</h2>
+  <p>El mercado de la orientaci&oacute;n laboral est&aacute; fragmentado. Aqu&iacute; est&aacute; lo que te hace &uacute;nico frente a la competencia:</p>
+
+  <div class="diff-grid">
+    <div class="diff-card">
+      <div class="icon">&#128064;</div>
+      <h4>La perspectiva del reclutador</h4>
+      <p>Ense&ntilde;as desde dentro c&oacute;mo piensan las empresas cuando seleccionan. Eso no lo tiene ning&uacute;n orientador sin experiencia en RRHH.</p>
+    </div>
+    <div class="diff-card">
+      <div class="icon">&#129504;</div>
+      <h4>Psicolog&iacute;a + T&eacute;cnica juntas</h4>
+      <p>La mayor&iacute;a de cursos se quedan en lo t&eacute;cnico. T&uacute; trabajas tambi&eacute;n el bloqueo emocional, la autoestima y la resiliencia.</p>
+    </div>
+    <div class="diff-card">
+      <div class="icon">&#127758;</div>
+      <h4>Formador itinerante nacional</h4>
+      <p>Mientras otros orientadores son locales, t&uacute; llegas donde nadie m&aacute;s va. El mercado rural y semirural est&aacute; casi vac&iacute;o.</p>
+    </div>
+    <div class="diff-card">
+      <div class="icon">&#128205;</div>
+      <h4>Metodolog&iacute;a propia</h4>
+      <p>Un m&eacute;todo con nombre propio (ej. &laquo;M&eacute;todo RH-Empleo&raquo;) construye marca, genera referidos y permite licenciar el sistema.</p>
+    </div>
+    <div class="diff-card">
+      <div class="icon">&#128222;</div>
+      <h4>Accesibilidad y cercania</h4>
+      <p>Las grandes consultoras son impersonales. T&uacute; ofreces trato directo, respuestas r&aacute;pidas y seguimiento real de cada persona.</p>
+    </div>
+    <div class="diff-card">
+      <div class="icon">&#128176;</div>
+      <h4>FUNDAE y Financiaci&oacute;n p&uacute;blica</h4>
+      <p>Ayudar a las empresas a bonificar la formaci&oacute;n elimina la barrera del precio y acelera la decisi&oacute;n de compra.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 7. CANALES DE CAPTACIÓN -->
+<section>
+  <h2><span class="icon">&#128243;</span> 7. C&oacute;mo Conseguir Clientes</h2>
+  <p>Ordenados por prioridad y velocidad de retorno:</p>
+
+  <div class="canales-grid">
+    <div class="canal">
+      <h4>&#128101; LinkedIn personal <span class="priority prio-alta">Prioridad ALTA</span></h4>
+      <p>Publica 3-4 veces por semana contenido &uacute;til (tips de CV, errores frecuentes, tendencias del mercado). En 90 d&iacute;as construyes autoridad y clientes inbound.</p>
+    </div>
+    <div class="canal">
+      <h4>&#127970; Contacto directo institucional <span class="priority prio-alta">Prioridad ALTA</span></h4>
+      <p>Email personalizado + llamada a responsables de formaci&oacute;n en ayuntamientos, mancomunidades y SPE. Tasa de respuesta del 20-30% si el dossier es profesional.</p>
+    </div>
+    <div class="canal">
+      <h4>&#128241; Instagram / TikTok laboral <span class="priority prio-media">Prioridad MEDIA</span></h4>
+      <p>V&iacute;deos cortos de 60-90 segundos sobre errores de CV, c&oacute;mo preparar una entrevista, etc. Captaci&oacute;n de clientes individuales con bajo coste.</p>
+    </div>
+    <div class="canal">
+      <h4>&#128232; Email marketing <span class="priority prio-media">Prioridad MEDIA</span></h4>
+      <p>Newsletter semanal gratuita con consejos de empleo. Construye lista propia (objetivo: 500 suscriptores en 6 meses). Los suscriptores convierten mejor.</p>
+    </div>
+    <div class="canal">
+      <h4>&#129309; Networking RRHH <span class="priority prio-alta">Prioridad ALTA</span></h4>
+      <p>Asistir a eventos de AEDIPE, HR Talents, foros de empleo. Los contactos de RRHH te derivan candidatos y te abren puertas a contratos in-company.</p>
+    </div>
+    <div class="canal">
+      <h4>&#128269; Google / SEO local <span class="priority prio-media">Prioridad MEDIA</span></h4>
+      <p>Ficha de Google Business y art&iacute;culos de blog optimizados para b&uacute;squedas como &laquo;orientador laboral [ciudad]&raquo; o &laquo;curso de b&uacute;squeda de empleo online&raquo;.</p>
+    </div>
+  </div>
+</section>
+
+</div><!-- /container -->
+</div>
+
+<!-- CTA FINAL -->
+<div class="cta-final">
+  <h2>&#128640; La idea es s&oacute;lida. El primer paso es hoy.</h2>
+  <p>El mercado existe, tu formaci&oacute;n encaja y la inversi&oacute;n inicial es m&iacute;nima. Lo &uacute;nico que te separa del lanzamiento es ejecutar la Fase 1.</p>
+  <a href="index.html">Ver las Formaciones &rarr;</a>
+</div>
+
+<footer>
+  <strong>Raghib HR &middot; Plan de Negocio 2026</strong><br />
+  <span style="font-size:.78rem;opacity:.7;margin-top:.4rem;display:block;">Documento de uso interno &middot; Actualizado junio 2026</span>
+</footer>
+
+</body>
+</html>
