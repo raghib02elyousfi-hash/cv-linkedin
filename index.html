@@ -1,38 +1,668 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-  <title>Optimiza tu CV - Raghib HR</title>
-</head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Formaciones de Fomento al Empleo · Raghib HR</title>
+  <style>
+    :root {
+      --primary: #1a3c5e;
+      --accent:  #e8a020;
+      --light:   #f4f7fb;
+      --text:    #1e2d3d;
+      --muted:   #6b7f95;
+      --white:   #ffffff;
+      --radius:  10px;
+      --shadow:  0 4px 18px rgba(0,0,0,.10);
+    }
 
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      color: var(--text);
+      background: var(--light);
+      line-height: 1.65;
+    }
+
+    /* NAV */
+    nav {
+      background: var(--primary);
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      height: 64px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0,0,0,.25);
+    }
+    .nav-logo { font-size: 1.2rem; font-weight: 700; letter-spacing: .5px; }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { color: rgba(255,255,255,.85); text-decoration: none; font-size: .9rem; transition: color .2s; }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(135deg, var(--primary) 60%, #2a5a8c);
+      color: var(--white);
+      text-align: center;
+      padding: 90px 5% 80px;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: var(--accent);
+      color: var(--white);
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: .35rem 1rem;
+      border-radius: 50px;
+      margin-bottom: 1.4rem;
+    }
+    .hero h1 {
+      font-size: clamp(1.9rem, 4vw, 3rem);
+      font-weight: 800;
+      line-height: 1.2;
+      max-width: 760px;
+      margin: 0 auto .9rem;
+    }
+    .hero h1 em { color: var(--accent); font-style: normal; }
+    .hero p { font-size: 1.1rem; opacity: .88; max-width: 620px; margin: 0 auto 2.2rem; }
+    .hero-ctas { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      display: inline-block;
+      padding: .8rem 2rem;
+      border-radius: var(--radius);
+      font-weight: 700;
+      font-size: .95rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform .15s, box-shadow .15s;
+    }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,.2); }
+    .btn-accent { background: var(--accent); color: var(--white); border: none; }
+    .btn-outline { background: transparent; color: var(--white); border: 2px solid rgba(255,255,255,.6); }
+    .btn-outline:hover { border-color: var(--white); }
+    .hero-stats { display: flex; justify-content: center; gap: 3rem; margin-top: 3rem; flex-wrap: wrap; }
+    .stat { text-align: center; }
+    .stat strong { display: block; font-size: 2rem; font-weight: 800; color: var(--accent); }
+    .stat span { font-size: .82rem; opacity: .8; }
+
+    /* SECTIONS */
+    section { padding: 72px 5%; }
+    .section-title { text-align: center; margin-bottom: 3rem; }
+    .section-title h2 { font-size: 1.9rem; font-weight: 800; color: var(--primary); margin-bottom: .5rem; }
+    .section-title p { color: var(--muted); max-width: 580px; margin: 0 auto; }
+
+    /* FORMACIONES GRID */
+    .formaciones-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 1.6rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .card {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 2rem;
+      transition: transform .2s, box-shadow .2s;
+      display: flex;
+      flex-direction: column;
+      gap: .9rem;
+      border-top: 4px solid transparent;
+    }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 10px 30px rgba(0,0,0,.13); }
+    .card.blue   { border-color: #2a7ade; }
+    .card.orange { border-color: var(--accent); }
+    .card.green  { border-color: #28a878; }
+    .card.purple { border-color: #7c4dff; }
+    .card.red    { border-color: #e84040; }
+    .card.teal   { border-color: #00acc1; }
+    .card-icon { width: 52px; height: 52px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; }
+    .card.blue   .card-icon { background: #e8f0fc; }
+    .card.orange .card-icon { background: #fff3e0; }
+    .card.green  .card-icon { background: #e6f7f0; }
+    .card.purple .card-icon { background: #ede7ff; }
+    .card.red    .card-icon { background: #fdeaea; }
+    .card.teal   .card-icon { background: #e0f5f8; }
+    .card h3 { font-size: 1.1rem; font-weight: 700; color: var(--primary); }
+    .card p  { font-size: .9rem; color: var(--muted); flex: 1; }
+    .card-tags { display: flex; flex-wrap: wrap; gap: .4rem; }
+    .tag { font-size: .72rem; font-weight: 600; padding: .25rem .7rem; border-radius: 50px; background: var(--light); color: var(--muted); }
+    .card-duration { font-size: .8rem; color: var(--muted); display: flex; align-items: center; gap: .4rem; }
+
+    /* MODELO DE NEGOCIO */
+    #negocio { background: var(--white); }
+    .negocio-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      align-items: start;
+    }
+    .negocio-left h2 { font-size: 1.8rem; font-weight: 800; color: var(--primary); line-height: 1.2; margin-bottom: 1.2rem; }
+    .negocio-left h2 em { color: var(--accent); font-style: normal; }
+    .negocio-left p { color: var(--muted); margin-bottom: 1rem; }
+    .pillars { display: flex; flex-direction: column; gap: 1.2rem; margin-top: 1.5rem; }
+    .pillar { display: flex; gap: 1rem; align-items: flex-start; }
+    .pillar-num {
+      min-width: 36px; height: 36px;
+      background: var(--accent);
+      color: var(--white);
+      border-radius: 50%;
+      font-weight: 700;
+      font-size: .9rem;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .pillar h4 { font-size: 1rem; color: var(--primary); margin-bottom: .2rem; }
+    .pillar p  { font-size: .88rem; color: var(--muted); margin: 0; }
+    .pricing-box { background: var(--light); border-radius: var(--radius); padding: 2rem; display: flex; flex-direction: column; gap: 1.1rem; }
+    .pricing-box h3 { font-size: 1.1rem; font-weight: 700; color: var(--primary); }
+    .price-item {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: .8rem 1rem; background: var(--white); border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,.06);
+    }
+    .price-item .label { font-size: .9rem; color: var(--text); font-weight: 500; }
+    .price-item .price { font-size: 1.1rem; font-weight: 800; color: var(--accent); }
+
+    /* MODALIDAD */
+    #modalidad { background: var(--primary); color: var(--white); }
+    #modalidad .section-title h2 { color: var(--white); }
+    #modalidad .section-title p  { color: rgba(255,255,255,.7); }
+    .modalidad-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 1.4rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .m-card {
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: var(--radius);
+      padding: 1.8rem 1.5rem;
+      text-align: center;
+      transition: background .2s;
+    }
+    .m-card:hover { background: rgba(255,255,255,.14); }
+    .m-card .icon { font-size: 2.2rem; margin-bottom: .8rem; }
+    .m-card h4 { font-size: 1rem; font-weight: 700; margin-bottom: .5rem; }
+    .m-card p  { font-size: .85rem; color: rgba(255,255,255,.7); }
+
+    /* PROCESO */
+    .proceso-steps {
+      display: flex;
+      gap: 0;
+      max-width: 900px;
+      margin: 0 auto;
+      position: relative;
+    }
+    .proceso-steps::before {
+      content: '';
+      position: absolute;
+      top: 36px; left: 10%; right: 10%;
+      height: 2px;
+      background: var(--accent);
+      z-index: 0;
+    }
+    .step { flex: 1; text-align: center; padding: 0 .5rem; position: relative; z-index: 1; }
+    .step-num {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: var(--white);
+      font-size: 1.4rem;
+      font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1rem;
+      box-shadow: 0 4px 12px rgba(232,160,32,.4);
+    }
+    .step h4 { font-size: .95rem; font-weight: 700; color: var(--primary); margin-bottom: .4rem; }
+    .step p  { font-size: .82rem; color: var(--muted); }
+
+    /* TESTIMONIOS */
+    #testimonios { background: var(--white); }
+    .testimonios-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+      gap: 1.4rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .testim { background: var(--light); border-radius: var(--radius); padding: 1.8rem; }
+    .testim p { font-size: .9rem; color: var(--text); font-style: italic; margin-bottom: 1.2rem; }
+    .testim-author { display: flex; align-items: center; gap: .8rem; }
+    .testim-avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      display: flex; align-items: center; justify-content: center;
+      color: var(--white); font-weight: 700; font-size: 1.1rem;
+    }
+    .testim-name { font-weight: 700; font-size: .9rem; }
+    .testim-role { font-size: .78rem; color: var(--muted); }
+
+    /* CONTACTO */
+    #contacto { background: linear-gradient(135deg, #f4f7fb, #e8eef5); }
+    .contacto-wrap {
+      max-width: 680px; margin: 0 auto;
+      background: var(--white); border-radius: 16px; box-shadow: var(--shadow); padding: 3rem;
+    }
+    .contacto-wrap h2 { font-size: 1.6rem; font-weight: 800; color: var(--primary); margin-bottom: .5rem; }
+    .contacto-wrap > p { color: var(--muted); margin-bottom: 2rem; }
+    form { display: flex; flex-direction: column; gap: 1.1rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    label { font-size: .85rem; font-weight: 600; color: var(--primary); margin-bottom: .3rem; display: block; }
+    input, select, textarea {
+      width: 100%; padding: .75rem 1rem;
+      border: 1.5px solid #d0dce8; border-radius: 8px;
+      font-size: .92rem; font-family: inherit; color: var(--text);
+      transition: border-color .2s; background: var(--white);
+    }
+    input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); }
+    textarea { resize: vertical; min-height: 110px; }
+    .form-submit { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-top: .5rem; }
+    .form-submit p { font-size: .8rem; color: var(--muted); margin: 0; }
+    .btn-form {
+      background: var(--accent); color: var(--white); border: none;
+      padding: .85rem 2.2rem; border-radius: var(--radius);
+      font-size: 1rem; font-weight: 700; cursor: pointer;
+      transition: background .2s, transform .15s;
+    }
+    .btn-form:hover { background: #c98510; transform: translateY(-2px); }
+
+    /* FOOTER */
+    footer {
+      background: var(--primary); color: rgba(255,255,255,.65);
+      text-align: center; padding: 2.5rem 5%; font-size: .85rem;
+    }
+    footer strong { color: var(--white); }
+    footer .footer-links { display: flex; justify-content: center; gap: 2rem; margin: 1rem 0; flex-wrap: wrap; }
+    footer a { color: rgba(255,255,255,.65); text-decoration: none; }
+    footer a:hover { color: var(--accent); }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .negocio-grid { grid-template-columns: 1fr; }
+      .proceso-steps { flex-direction: column; gap: 2rem; }
+      .proceso-steps::before { display: none; }
+      .form-row { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
 <body>
 
-  <!-- Título principal -->
-  <h1>Mejora tu CV y LinkedIn</h1>
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Raghib <span>HR</span> &middot; Fomento al Empleo</div>
+  <ul class="nav-links">
+    <li><a href="#formaciones">Formaciones</a></li>
+    <li><a href="#negocio">Negocio Aut&oacute;nomo</a></li>
+    <li><a href="#modalidad">Modalidad</a></li>
+    <li><a href="#testimonios">Testimonios</a></li>
+    <li><a href="#contacto">Contactar</a></li>
+  </ul>
+</nav>
 
-  <!-- Descripción -->
-  <p>Rellena este formulario y te ayudaré a mejorar tu perfil profesional.</p>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">&#127758; Toda Espa&ntilde;a &middot; Presencial &amp; Online</div>
+  <h1>Formaciones de <em>Fomento al Empleo</em><br>para Transformar Carreras</h1>
+  <p>Talleres pr&aacute;cticos, mentor&iacute;a individual y orientaci&oacute;n profesional para que encuentres empleo, potencies tu marca personal y construyas tu proyecto aut&oacute;nomo &mdash; sin l&iacute;mites geogr&aacute;ficos.</p>
+  <div class="hero-ctas">
+    <a href="#formaciones" class="btn btn-accent">Ver Formaciones</a>
+    <a href="#contacto" class="btn btn-outline">Solicitar Informaci&oacute;n</a>
+  </div>
+  <div class="hero-stats">
+    <div class="stat"><strong>+500</strong><span>Participantes formados</span></div>
+    <div class="stat"><strong>17</strong><span>Comunidades Aut&oacute;nomas</span></div>
+    <div class="stat"><strong>85%</strong><span>Tasa de inserci&oacute;n laboral</span></div>
+    <div class="stat"><strong>6</strong><span>Programas especializados</span></div>
+  </div>
+</section>
 
-  <!-- Formulario -->
-  <form>
+<!-- FORMACIONES -->
+<section id="formaciones">
+  <div class="section-title">
+    <h2>Cat&aacute;logo de Formaciones</h2>
+    <p>Programas dise&ntilde;ados para cada etapa del proceso de b&uacute;squeda de empleo y desarrollo profesional</p>
+  </div>
+  <div class="formaciones-grid">
 
-    <!-- Nombre -->
-    <label>Nombre:</label><br>
-    <input type="text"><br><br>
+    <div class="card blue">
+      <div class="card-icon">&#128270;</div>
+      <h3>Encuentra Empleo: Estrategia y M&eacute;todo</h3>
+      <p>Aprende a identificar oportunidades ocultas, gestionar el mercado laboral visible e invisible y dise&ntilde;ar una b&uacute;squeda de empleo sistem&aacute;tica y efectiva.</p>
+      <div class="card-tags">
+        <span class="tag">B&uacute;squeda activa</span>
+        <span class="tag">Mercado oculto</span>
+        <span class="tag">Red de contactos</span>
+      </div>
+      <div class="card-duration">&#128336; 8 horas &middot; Presencial / Online</div>
+    </div>
 
-    <!-- Email -->
-    <label>Email:</label><br>
-    <input type="email"><br><br>
+    <div class="card orange">
+      <div class="card-icon">&#128196;</div>
+      <h3>Actualiza tu CV y Perfil LinkedIn</h3>
+      <p>Construye un curr&iacute;culum ATS-friendly y un perfil LinkedIn que aparezca en las b&uacute;squedas de los reclutadores. Optimizaci&oacute;n, palabras clave y narrativa profesional.</p>
+      <div class="card-tags">
+        <span class="tag">CV moderno</span>
+        <span class="tag">LinkedIn SSI</span>
+        <span class="tag">Personal Branding</span>
+      </div>
+      <div class="card-duration">&#128336; 6 horas &middot; Online con tutor&iacute;a</div>
+    </div>
 
-    <!-- Experiencia -->
-    <label>Experiencia:</label><br>
-    <textarea></textarea><br><br>
+    <div class="card green">
+      <div class="card-icon">&#127757;</div>
+      <h3>D&oacute;nde y C&oacute;mo Buscar Empleo en Espa&ntilde;a</h3>
+      <p>Gu&iacute;a completa de portales (InfoJobs, LinkedIn, Indeed, Tecnoempleo&hellip;), ETTs, colegios profesionales, SEPE, EREs y fuentes no convencionales en cada comunidad.</p>
+      <div class="card-tags">
+        <span class="tag">Portales de empleo</span>
+        <span class="tag">SEPE &amp; SPE</span>
+        <span class="tag">Networking</span>
+      </div>
+      <div class="card-duration">&#128336; 4 horas &middot; Taller pr&aacute;ctico</div>
+    </div>
 
-    <!-- Botón -->
-    <button>Enviar</button>
+    <div class="card purple">
+      <div class="card-icon">&#129504;</div>
+      <h3>Psicolog&iacute;a del Empleo y Resiliencia</h3>
+      <p>Gestiona el estr&eacute;s del desempleo, trabaja la autoestima profesional, supera el s&iacute;ndrome del impostor y mant&eacute;n la motivaci&oacute;n durante el proceso de b&uacute;squeda.</p>
+      <div class="card-tags">
+        <span class="tag">Autoestima</span>
+        <span class="tag">Resiliencia</span>
+        <span class="tag">Gesti&oacute;n emocional</span>
+      </div>
+      <div class="card-duration">&#128336; 8 horas &middot; Sesiones en grupo</div>
+    </div>
 
-  </form>
+    <div class="card red">
+      <div class="card-icon">&#127919;</div>
+      <h3>Mentor&iacute;a Individual Personalizada</h3>
+      <p>Acompa&ntilde;amiento uno a uno para definir tu objetivo profesional, dise&ntilde;ar tu plan de carrera y recibir feedback real y honesto en cada fase del proceso.</p>
+      <div class="card-tags">
+        <span class="tag">1 a 1</span>
+        <span class="tag">Plan de carrera</span>
+        <span class="tag">Seguimiento</span>
+      </div>
+      <div class="card-duration">&#128336; Sesiones quincenales &middot; Online</div>
+    </div>
 
-  <p>Servicio de optimización de CV y LinkedIn</p>
+    <div class="card teal">
+      <div class="card-icon">&#128188;</div>
+      <h3>Proyecto Aut&oacute;nomo: de la Idea al Alta</h3>
+      <p>Valida tu idea de negocio, entiende el r&eacute;gimen de aut&oacute;nomos, dise&ntilde;a tu propuesta de valor y lanza tu actividad emprendedora en cualquier punto de Espa&ntilde;a.</p>
+      <div class="card-tags">
+        <span class="tag">Aut&oacute;nomo</span>
+        <span class="tag">Modelo de negocio</span>
+        <span class="tag">Emprendimiento</span>
+      </div>
+      <div class="card-duration">&#128336; 12 horas &middot; Blended learning</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- NEGOCIO AUTÓNOMO -->
+<section id="negocio">
+  <div class="negocio-grid">
+    <div class="negocio-left">
+      <h2>Tu Negocio Aut&oacute;nomo<br><em>Sin L&iacute;mites</em> por toda Espa&ntilde;a</h2>
+      <p>Este modelo de formaciones est&aacute; dise&ntilde;ado para funcionar de manera completamente aut&oacute;noma: t&uacute; decides cu&aacute;ndo, d&oacute;nde y c&oacute;mo impartir cada programa. Trabaja en Madrid, Barcelona, Sevilla, Valencia o en cualquier pueblo con banda ancha.</p>
+      <p>Ingresos recurrentes combinando talleres presenciales con suscripciones online y mentor&iacute;a individual. Sin jefe, sin horario fijo, con prop&oacute;sito real.</p>
+      <div class="pillars">
+        <div class="pillar">
+          <div class="pillar-num">1</div>
+          <div>
+            <h4>Flexibilidad geogr&aacute;fica total</h4>
+            <p>Combina sesiones presenciales en ayuntamientos, fundaciones y empresas con formaciones 100% online. Sin fronteras.</p>
+          </div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-num">2</div>
+          <div>
+            <h4>M&uacute;ltiples fuentes de ingresos</h4>
+            <p>Cobros por sesi&oacute;n, packs de mentor&iacute;a, contratos con entidades p&uacute;blicas, licencias de contenido y formaci&oacute;n in-company.</p>
+          </div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-num">3</div>
+          <div>
+            <h4>Escalable desde el minuto uno</h4>
+            <p>Empieza solo y crece a&ntilde;adiendo colaboradores, co-formadores o franquiciando el m&eacute;todo a otros orientadores.</p>
+          </div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-num">4</div>
+          <div>
+            <h4>Impacto social con retorno econ&oacute;mico</h4>
+            <p>Cada persona que acompa&ntilde;as encuentra empleo o lanza su proyecto. Impacto medible que refuerza tu reputaci&oacute;n.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pricing-box">
+      <h3>&#128176; Tarifas orientativas</h3>
+      <div class="price-item">
+        <span class="label">Taller grupal (8h)</span>
+        <span class="price">45 &euro; / persona</span>
+      </div>
+      <div class="price-item">
+        <span class="label">Pack CV + LinkedIn</span>
+        <span class="price">120 &euro; / pack</span>
+      </div>
+      <div class="price-item">
+        <span class="label">Mentor&iacute;a individual (4 sesiones)</span>
+        <span class="price">280 &euro; / mes</span>
+      </div>
+      <div class="price-item">
+        <span class="label">Formaci&oacute;n in-company</span>
+        <span class="price">Desde 900 &euro; / jornada</span>
+      </div>
+      <div class="price-item">
+        <span class="label">Contrato entidad p&uacute;blica</span>
+        <span class="price">A medida</span>
+      </div>
+      <div class="price-item">
+        <span class="label">Suscripci&oacute;n online mensual</span>
+        <span class="price">29 &euro; / mes</span>
+      </div>
+      <p style="font-size:.8rem;color:var(--muted);margin-top:.5rem;">
+        &#128204; Posibilidad de financiaci&oacute;n a trav&eacute;s de <strong>FUNDAE</strong> (formaci&oacute;n bonificada) y convocatorias de <strong>SEPE</strong>.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- MODALIDAD -->
+<section id="modalidad">
+  <div class="section-title">
+    <h2>Modalidades &middot; Toda Espa&ntilde;a</h2>
+    <p>Elige el formato que mejor se adapta a ti o a tu organizaci&oacute;n</p>
+  </div>
+  <div class="modalidad-grid">
+    <div class="m-card">
+      <div class="icon">&#127970;</div>
+      <h4>Presencial Local</h4>
+      <p>Talleres en espacios cedidos por ayuntamientos, centros de empleo, c&aacute;maras de comercio y fundaciones en toda Espa&ntilde;a.</p>
+    </div>
+    <div class="m-card">
+      <div class="icon">&#128187;</div>
+      <h4>100% Online</h4>
+      <p>Sesiones en directo por videoconferencia + plataforma de contenidos accesible 24/7 desde cualquier dispositivo.</p>
+    </div>
+    <div class="m-card">
+      <div class="icon">&#128101;</div>
+      <h4>In-Company</h4>
+      <p>Programas a medida para EREs, outplacement y recolocaci&oacute;n dentro de empresas y grupos empresariales.</p>
+    </div>
+    <div class="m-card">
+      <div class="icon">&#127758;</div>
+      <h4>Itinerante</h4>
+      <p>Formador que viaja a tu provincia, ciudad o comarca para impartir el programa directamente donde se necesita.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESO -->
+<section id="proceso" style="background: var(--white);">
+  <div class="section-title">
+    <h2>C&oacute;mo Funciona</h2>
+    <p>Un proceso claro en 4 pasos para comenzar tu formaci&oacute;n o contratar un programa</p>
+  </div>
+  <div class="proceso-steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <h4>Diagn&oacute;stico</h4>
+      <p>Entrevista gratuita de 30 min para entender tu situaci&oacute;n y objetivos profesionales</p>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <h4>Itinerario</h4>
+      <p>Dise&ntilde;amos juntos el programa de formaciones m&aacute;s adecuado para tu perfil</p>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <h4>Formaci&oacute;n</h4>
+      <p>Participas en talleres, sesiones de mentor&iacute;a y accedes a los materiales online</p>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <h4>Seguimiento</h4>
+      <p>Acompa&ntilde;amiento continuo hasta que alcanzas tu objetivo laboral o profesional</p>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIOS -->
+<section id="testimonios">
+  <div class="section-title">
+    <h2>Lo que dicen los participantes</h2>
+    <p>Experiencias reales de personas que transformaron su situaci&oacute;n profesional</p>
+  </div>
+  <div class="testimonios-grid">
+    <div class="testim">
+      <p>"Despu&eacute;s de 2 a&ntilde;os en paro, el taller de b&uacute;squeda de empleo me cambi&oacute; completamente la perspectiva. A los 3 meses encontr&eacute; trabajo en una empresa que nunca hab&iacute;a publicado la oferta."</p>
+      <div class="testim-author">
+        <div class="testim-avatar">M</div>
+        <div>
+          <div class="testim-name">Mar&iacute;a G.</div>
+          <div class="testim-role">T&eacute;cnica de RRHH &middot; M&aacute;laga</div>
+        </div>
+      </div>
+    </div>
+    <div class="testim">
+      <p>"La mentor&iacute;a individual fue clave. Me ayud&oacute; a reposicionarme como consultor aut&oacute;nomo y a fijar mis tarifas. Ahora facturo el doble que como empleado."</p>
+      <div class="testim-author">
+        <div class="testim-avatar">J</div>
+        <div>
+          <div class="testim-name">Javier R.</div>
+          <div class="testim-role">Consultor independiente &middot; Valencia</div>
+        </div>
+      </div>
+    </div>
+    <div class="testim">
+      <p>"El taller de psicolog&iacute;a del empleo me devolvi&oacute; la confianza. Era algo que ning&uacute;n otro curso ofrec&iacute;a. Fundamental para afrontar las entrevistas sin ansiedad."</p>
+      <div class="testim-author">
+        <div class="testim-avatar">A</div>
+        <div>
+          <div class="testim-name">Ana P.</div>
+          <div class="testim-role">Educadora Social &middot; Bilbao</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<section id="contacto">
+  <div class="contacto-wrap">
+    <h2>&#128640; Empieza tu Camino</h2>
+    <p>Cu&eacute;ntame tu situaci&oacute;n y te propongo el itinerario formativo m&aacute;s adecuado. Primera consulta sin compromiso.</p>
+    <form onsubmit="handleSubmit(event)">
+      <div class="form-row">
+        <div>
+          <label for="nombre">Nombre completo</label>
+          <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required />
+        </div>
+        <div>
+          <label for="email">Correo electr&oacute;nico</label>
+          <input type="email" id="email" name="email" placeholder="tu@email.com" required />
+        </div>
+      </div>
+      <div class="form-row">
+        <div>
+          <label for="ciudad">Ciudad / Provincia</label>
+          <input type="text" id="ciudad" name="ciudad" placeholder="Ej: Sevilla" />
+        </div>
+        <div>
+          <label for="formacion">Formaci&oacute;n de inter&eacute;s</label>
+          <select id="formacion" name="formacion">
+            <option value="">Selecciona una opci&oacute;n</option>
+            <option>Encuentra Empleo</option>
+            <option>CV y LinkedIn</option>
+            <option>D&oacute;nde Buscar Empleo</option>
+            <option>Psicolog&iacute;a del Empleo</option>
+            <option>Mentor&iacute;a Individual</option>
+            <option>Proyecto Aut&oacute;nomo</option>
+            <option>Programa completo</option>
+          </select>
+        </div>
+      </div>
+      <div>
+        <label for="mensaje">Tu situaci&oacute;n profesional</label>
+        <textarea id="mensaje" name="mensaje" placeholder="Cu&eacute;ntame brevemente d&oacute;nde est&aacute;s ahora y qu&eacute; quieres conseguir..."></textarea>
+      </div>
+      <div class="form-submit">
+        <p>&#128274; Tus datos se usan solo para contactarte. Sin spam.</p>
+        <button type="submit" class="btn-form">Solicitar informaci&oacute;n &rarr;</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div><strong>Raghib HR &middot; Fomento al Empleo</strong></div>
+  <div class="footer-links">
+    <a href="#formaciones">Formaciones</a>
+    <a href="#negocio">Negocio Aut&oacute;nomo</a>
+    <a href="#modalidad">Modalidades</a>
+    <a href="#contacto">Contacto</a>
+  </div>
+  <div>&#127758; Toda Espa&ntilde;a &middot; Presencial y Online &nbsp;&middot;&nbsp; raghib02elyousfi@gmail.com</div>
+  <div style="margin-top:.8rem;font-size:.78rem;opacity:.6;">
+    &copy; 2026 Raghib HR &middot; Actividad de orientaci&oacute;n y formaci&oacute;n profesional para el empleo
+  </div>
+</footer>
+
+<script>
+  function handleSubmit(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('.btn-form');
+    btn.textContent = 'Mensaje enviado — te contacto pronto';
+    btn.style.background = '#28a878';
+    btn.disabled = true;
+  }
+
+  document.querySelectorAll('a[href^="#"]').forEach(function(a) {
+    a.addEventListener('click', function(e) {
+      e.preventDefault();
+      var target = document.querySelector(a.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+</script>
 
 </body>
 </html>
