@@ -396,10 +396,10 @@
         <label>Nº de empleados de tu empresa (estructura)</label>
         <select id="numEmpresaEmps" onchange="calcular()">
           <option value="1">1 empleado</option>
-          <option value="3" selected>3 empleados</option>
+          <option value="3" selected>3 empleados ← precio objetivo</option>
           <option value="5">5 empleados</option>
         </select>
-        <span class="hint">Afecta al reparto de costes fijos de estructura</span>
+        <span class="hint">Con 3 emp. el precio B2B correcto es 22,03 €/h. Con 1 emp. sería 30,84 €/h (no competitivo). Con 5 emp.: 20,26 €/h.</span>
       </div>
     </div>
   </div>
@@ -467,10 +467,47 @@
     </div>
   </div>
 
+  <!-- VIABILIDAD BOX -->
+  <div class="card" style="margin-top:20px">
+    <div class="card-title">📊 Referencia rápida – Capital y viabilidad (3 empleados)</div>
+    <div style="overflow-x:auto">
+      <table class="breakdown">
+        <thead><tr>
+          <th>Escenario</th><th>Capital mínimo</th><th>Recomendado (+25%)</th>
+          <th>1er mes positivo</th><th>BEP acumulado</th><th>EBITDA año 2 (85% ocup.)</th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>A – Estructura completa</strong><br><small>Oficina 300€ + vehículo leasing 350€</small></td>
+            <td style="text-align:right;color:#C00000"><strong>13.310 €</strong></td>
+            <td style="text-align:right;color:#C00000"><strong>16.637 €</strong></td>
+            <td style="text-align:center">Mes 10</td>
+            <td style="text-align:center">&gt; Mes 18</td>
+            <td style="text-align:right">~7.700 €/año</td>
+          </tr>
+          <tr style="background:#f0f9ea">
+            <td><strong>B – Lean ★ Recomendado</strong><br><small>Home office + coche propio (ahorra 650€/mes)</small></td>
+            <td style="text-align:right;color:#70AD47"><strong>5.601 €</strong></td>
+            <td style="text-align:right;color:#70AD47"><strong>7.001 €</strong></td>
+            <td style="text-align:center">Mes 6</td>
+            <td style="text-align:center">Mes 16</td>
+            <td style="text-align:right">~18.000 €/año</td>
+          </tr>
+        </tbody>
+        <tfoot><tr>
+          <td colspan="6" style="font-size:0.8rem;color:#555;font-style:italic">
+            Contratación progresiva: M3 → 1 empleado · M7 → 2 empleados · M12 → 3 empleados.
+            Precios: B2B 22,03 €/h · B2C 22,22 €/h. EBITDA año 2 es retribución disponible del propietario antes de IRPF.
+          </td>
+        </tr></tfoot>
+      </table>
+    </div>
+  </div>
+
   <!-- FOOTER NOTE -->
   <p class="footer-note">
     Convenio Colectivo Limpieza Edificios y Locales Palencia 2022-2025 (en ultraactividad 2026) ·
-    Salarios +3% BrillOPal · SS empresa 31,78% · Precios s/IVA (21% a añadir)
+    Salarios +3% BrillOPal · SS empresa 31,78% · Precios B2B: 22,03 €/h · B2C: 22,22 €/h (s/IVA 21%)
   </p>
 </div>
 
@@ -480,6 +517,7 @@ const SS_TOTAL   = 0.3178;
 const PAGAS      = 14;
 const HOURS_YEAR = 1687.5;
 const STRUCT_MO  = 1430;
+const STRUCT_LEAN= 780;   // home office + coche propio
 const MARGIN     = 0.30;
 
 // Direct variable costs per hour
@@ -488,12 +526,12 @@ const DIRECT = {
   b2c: { mat: 0.55, desp: 0.45 },
 };
 
-// Category salaries (monthly, BrillOPal +3%)
+// Category salaries (monthly, BrillOPal +3%, Palencia conv. 2025)
 const SAL = {
-  1: 1416.25,
-  2: 1277.20,
-  3: 1199.95,
-  4: 1140.44,
+  1: 1416.25,   // I – Encargado General
+  2: 1277.20,   // II – Encargado de Zona
+  3: 1199.95,   // III – Especialista
+  4: 1140.44,   // IV – Limpiador/a (referencia principal)
 };
 
 // Installation descriptions

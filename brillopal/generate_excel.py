@@ -127,12 +127,28 @@ STRUCTURE = {
     "Varios / imprevistos":      100.00,
 }
 STRUCTURE_TOTAL = sum(STRUCTURE.values())  # 1,430 €/month
+STRUCTURE_LEAN  = 780.00  # home office + coche propio (sin leasing ni alquiler)
 
-# Owner (autónomo) cost
-OWNER_SS_Y1 = 80.00    # tarifa plana primer año
-OWNER_SS_Y2 = 160.00   # segundo semestre
-OWNER_SS_STD = 320.00  # tarifa estándar
-OWNER_DRAW = 1500.00   # monthly owner draw
+# ── Derived pricing (CORRECT – based on 3-employee escandallo) ─────────────
+_sal_iv      = 1107.22 * (1 + PREMIUM)             # 1140.44 €/month
+_sal_anual   = _sal_iv * PAGAS                      # 15 966.16 €/year
+_ss_emp_year = (_sal_anual / 12) * 12 * SS_TOTAL    # 5 074 €
+_labor_h     = (_sal_anual + _ss_emp_year) / HOURS_YEAR  # 12.47 €/h
+_absent_h    = _labor_h * 0.035                     # 0.44 €/h
+_direct_b2b  = _labor_h + _absent_h + 0.40 + 0.25  # 13.56 €/h
+_direct_b2c  = _labor_h + _absent_h + 0.55 + 0.45  # 13.71 €/h
+_struct_3h   = STRUCTURE_TOTAL / (3 * HOURS_YEAR / 12)  # 3.39 €/h (3-emp ref.)
+PRICE_B2B    = round((_direct_b2b + _struct_3h) * 1.30, 2)   # 22.03 €/h
+PRICE_B2C    = round((_direct_b2c + _struct_3h) * 1.30, 2)   # 22.22 €/h
+PRICE_AVG    = PRICE_B2B * 0.70 + PRICE_B2C * 0.30            # 22.09 €/h weighted
+VAR_H        = (0.40 + 0.25) * 0.70 + (0.55 + 0.45) * 0.30  # 0.755 €/h variable
+LABOR_MO     = (_sal_anual + _ss_emp_year) / 12               # 1 756 €/month
+
+# Owner (autónomo) monthly SS cost
+OWNER_SS_Y1  = 80.00    # tarifa plana primer año
+OWNER_SS_Y2  = 160.00   # segundo semestre año 1
+OWNER_SS_STD = 320.00   # tarifa estándar año 2+
+OWNER_DRAW   = 1500.00  # referencia retiro mensual propietario
 
 # ─── SHEET 1: ESCANDALLO ──────────────────────────────────────────────────────
 
@@ -490,46 +506,46 @@ def build_cuenta_resultados(wb):
               "Ene'27","Feb'27","Mar'27","Abr'27","May'27","Jun'27",
               "Jul'27","Ago'27","Sep'27","Oct'27","Nov'27","Dic'27"]
 
-    # ── Scenario assumptions ─────────────────────────────────────────────────
-    # Hours/month available per scenario
-    AVAIL = {1: 140.625, 3: 421.875, 5: 703.125}  # 1,687.5/12
+    # ── Shared scenario assumptions ───────────────────────────────────────────
+    AVAIL = {1: 140.625, 3: 421.875, 5: 703.125}
 
-    # Occupancy ramp (% of available hours billed) – slow start
+    # Ramp occupancy (% of available hours billed)
     RAMP = [0.35, 0.45, 0.55, 0.65, 0.70, 0.72,
             0.75, 0.75, 0.78, 0.80, 0.82, 0.85,
             0.85, 0.82, 0.87, 0.88, 0.90, 0.90]
 
-    # B2B/B2C split of billed hours
-    B2B_PCT = 0.70   # 70% B2B hours
+    B2B_PCT = 0.70
     B2C_PCT = 0.30
+    owner_cost_18m = [OWNER_SS_Y1]*6 + [OWNER_SS_Y2]*6 + [OWNER_SS_STD]*6
 
-    # Direct cost per hour (3-employee reference for the mix; scaled by actual)
-    struct_per_h = {n: STRUCTURE_TOTAL / AVAIL[n] for n in [1,3,5]}
+    row_labels = [
+        ("Horas B2B facturadas",        "h_b2b"),
+        ("Horas B2C facturadas",        "h_b2c"),
+        ("Ingresos B2B (s/IVA) 22,03€/h","rev_b2b"),
+        ("Ingresos B2C (s/IVA) 22,22€/h","rev_b2c"),
+        ("TOTAL INGRESOS",              "total_rev"),
+        ("— Coste laboral empleados",   "labor"),
+        ("— Cuota autónomo titular",    "owner_ss"),
+        ("— Materiales y transporte",   "mat"),
+        ("— Estructura fija",           "struct"),
+        ("TOTAL COSTES",                "total_cost"),
+        ("EBITDA",                      "ebitda"),
+        ("Margen EBITDA (%)",           "margin"),
+        ("Break-even mensual (h/mes)",  "bep"),
+    ]
 
-    # Labour cost per employee/month
-    sal_iv = 1107.22 * 1.03 * PAGAS / 12
-    ss_iv  = (1107.22 * 1.03 * PAGAS / 12) * SS_TOTAL
-    LABOR_PER_EMP = sal_iv + ss_iv  # ~1,756 €/month
+    # ── Steady-state scenarios (1, 3, 5 employees from month 1) ──────────────
+    scenarios_static = [(1, BLUE_DARK, STRUCTURE_TOTAL),
+                        (3, BLUE_MED,  STRUCTURE_TOTAL),
+                        (5, GREEN,     STRUCTURE_TOTAL)]
 
-    # Owner cost per month (tarifa plana 1st year, then standard)
-    owner_cost = [OWNER_SS_Y1]*6 + [OWNER_SS_Y2]*6 + [OWNER_SS_STD]*6
-
-    # Revenue per hour
-    rev_b2b = 20.41
-    rev_b2c = 22.50
-    dir_cost_h = 13.22 + 0.40 + 0.25  # labor+absentia+mat+desp (B2B ref.)
-
-    # ── Write scenarios ───────────────────────────────────────────────────────
-    scenarios = [(1, BLUE_DARK), (3, BLUE_MED), (5, GREEN)]
-    col_offset = 0
-
-    for s_idx, (n_emp, s_color) in enumerate(scenarios):
-        c0 = 1 + s_idx * 22  # start column for this scenario
+    for s_idx, (n_emp, s_color, struct_cost) in enumerate(scenarios_static):
+        c0 = 1 + s_idx * 22
 
         apply_header(ws, 1, c0, c0+19,
-            f"ESCENARIO {n_emp} EMPLEADO{'S' if n_emp>1 else ''}", s_color)
+            f"ESCENARIO {n_emp} EMPLEADO{'S' if n_emp>1 else ''} – Estructura completa (1.430€/mes)",
+            s_color)
 
-        # Month headers
         ws.cell(row=2, column=c0, value="Concepto").fill = fill(s_color)
         ws.cell(row=2, column=c0).font = Font(bold=True, color=WHITE)
         ws.cell(row=2, column=c0).border = border_thin()
@@ -545,60 +561,37 @@ def build_cuenta_resultados(wb):
         ws.cell(row=2, column=c0+19).border = border_thin()
         ws.cell(row=2, column=c0+19).alignment = center()
 
-        rows_data = {}
-        row_labels = [
-            ("Horas B2B facturadas", "h_b2b"),
-            ("Horas B2C facturadas", "h_b2c"),
-            ("Ingresos B2B (s/IVA)", "rev_b2b"),
-            ("Ingresos B2C (s/IVA)", "rev_b2c"),
-            ("TOTAL INGRESOS", "total_rev"),
-            ("— Coste laboral empleados", "labor"),
-            ("— Cuota autónomo titular", "owner_ss"),
-            ("— Materiales y transporte", "mat"),
-            ("— Estructura fija", "struct"),
-            ("TOTAL COSTES", "total_cost"),
-            ("EBITDA / BENEFICIO NETO", "ebitda"),
-            ("Margen EBITDA (%)", "margin"),
-            ("Break-even (h/mes necesarias)", "bep"),
-        ]
-
         monthly_vals = {k: [] for _, k in row_labels}
 
         for m_i in range(18):
             avail_h = AVAIL[n_emp]
-            ramp = RAMP[m_i]
-            billed = avail_h * ramp
-            h_b2b = billed * B2B_PCT
-            h_b2c = billed * B2C_PCT
-            r_b2b = h_b2b * rev_b2b
-            r_b2c = h_b2c * rev_b2c
+            billed  = avail_h * RAMP[m_i]
+            h_b2b   = billed * B2B_PCT
+            h_b2c   = billed * B2C_PCT
+            r_b2b   = h_b2b * PRICE_B2B
+            r_b2c   = h_b2c * PRICE_B2C
             tot_rev = r_b2b + r_b2c
-
-            labor  = n_emp * LABOR_PER_EMP
-            o_ss   = owner_cost[m_i]
-            mat    = billed * (DIRECT["b2b"]["Materiales/productos"] + DIRECT["b2b"]["Desplazamiento"])
-            struct = STRUCTURE_TOTAL
+            labor   = n_emp * LABOR_MO
+            o_ss    = owner_cost_18m[m_i]
+            mat     = billed * VAR_H
+            struct  = struct_cost
             tot_cost = labor + o_ss + mat + struct
-            ebitda = tot_rev - tot_cost
-            margin = ebitda / tot_rev if tot_rev > 0 else 0
-            # BEP: hours where rev covers fixed (struct+labor+ownercost)
-            fixed = struct + labor + o_ss
-            var_margin_h = (rev_b2b * B2B_PCT + rev_b2c * B2C_PCT) - dir_cost_h
-            bep = fixed / var_margin_h if var_margin_h > 0 else 0
+            ebitda  = tot_rev - tot_cost
+            margin  = ebitda / tot_rev if tot_rev > 0 else 0
+            fixed_mo = struct + labor + o_ss
+            bep     = fixed_mo / (PRICE_AVG - VAR_H) if (PRICE_AVG - VAR_H) > 0 else 0
 
-            for key, val in zip([k for _,k in row_labels],
+            for key, val in zip([k for _, k in row_labels],
                                  [h_b2b, h_b2c, r_b2b, r_b2c, tot_rev,
                                   -labor, -o_ss, -mat, -struct,
                                   -(labor+o_ss+mat+struct), ebitda, margin, bep]):
                 monthly_vals[key].append(val)
 
-        # Write rows
         for r_idx, (label, key) in enumerate(row_labels):
             row = 3 + r_idx
             is_total = label.startswith(("TOTAL", "EBITDA"))
             is_pct   = key == "margin"
             is_h     = key in ("h_b2b", "h_b2c", "bep")
-            is_neg   = key in ("labor", "owner_ss", "mat", "struct", "total_cost")
 
             c = ws.cell(row=row, column=c0, value=label)
             c.fill = fill(BLUE_LIGHT if is_total else WHITE)
@@ -612,32 +605,188 @@ def build_cuenta_resultados(wb):
                 cell = ws.cell(row=row, column=c0+1+m_i, value=v)
                 cell.border = border_thin()
                 cell.alignment = right()
-                if is_pct:
-                    cell.number_format = PCT
-                elif is_h:
-                    cell.number_format = '#,##0.0 "h"'
-                else:
-                    cell.number_format = EURO
-                if is_total and key == "ebitda":
+                if is_pct:   cell.number_format = PCT
+                elif is_h:   cell.number_format = '#,##0.0 "h"'
+                else:        cell.number_format = EURO
+                if key == "ebitda":
                     cell.fill = fill(GREEN if v >= 0 else "FFCCCC")
                     cell.font = Font(bold=True, color=BLUE_DARK, size=9)
 
-            # Total column
             tc = ws.cell(row=row, column=c0+19, value=total_val if not is_pct else vals[-1])
             tc.border = border_thin()
             tc.alignment = right()
             tc.fill = fill(GOLD)
             tc.font = Font(bold=True, color=BLUE_DARK, size=9)
-            if is_pct:
-                tc.number_format = PCT
-            elif is_h:
-                tc.number_format = '#,##0.0 "h"'
-            else:
-                tc.number_format = EURO
+            if is_pct:   tc.number_format = PCT
+            elif is_h:   tc.number_format = '#,##0.0 "h"'
+            else:        tc.number_format = EURO
 
-        ws.column_dimensions[get_column_letter(c0)].width = 30
+        ws.column_dimensions[get_column_letter(c0)].width = 32
         for m_i in range(19):
             ws.column_dimensions[get_column_letter(c0+1+m_i)].width = 10
+
+    return ws
+
+
+# ─── SHEET 6: CASH FLOW PROGRESIVO – ESCENARIO LEAN ──────────────────────────
+
+def build_cashflow_lean(wb):
+    ws = wb.create_sheet("6_CashFlow Lean (Recomendado)")
+    ws.sheet_view.showGridLines = False
+
+    MONTHS = ["Jul'26","Ago'26","Sep'26","Oct'26","Nov'26","Dic'26",
+              "Ene'27","Feb'27","Mar'27","Abr'27","May'27","Jun'27",
+              "Jul'27","Ago'27","Sep'27","Oct'27","Nov'27","Dic'27"]
+
+    # Progressive hiring schedule
+    # (n_employees, occupancy_pct)
+    SCHEDULE = [
+        (0, 0.00), (0, 0.00),            # M1-2: prospección, sin empleados
+        (1, 0.43), (1, 0.64),            # M3-4: 1er empleado, rampa
+        (1, 0.78), (1, 0.89),            # M5-6: cerca de BEP
+        (2, 0.60), (2, 0.75),            # M7-8: 2º empleado
+        (2, 0.82), (2, 0.88),            # M9-10
+        (2, 0.92), (3, 0.68),            # M11-12: 3er empleado
+        (3, 0.75), (3, 0.80),            # M13-14
+        (3, 0.85), (3, 0.88),            # M15-16
+        (3, 0.90), (3, 0.90),            # M17-18
+    ]
+
+    HOURS_MO   = 1687.5 / 12
+    owner_ss   = [80]*6 + [160]*6 + [320]*6
+
+    SETUP_FULL = 2800.0
+    SETUP_LEAN = 800.0
+
+    for scen_idx, (scen_name, struct_cost, setup, s_color) in enumerate([
+        ("A – ESTRUCTURA COMPLETA (oficina + vehículo leasing)", STRUCTURE_TOTAL, SETUP_FULL, BLUE_DARK),
+        ("B – LEAN: home office + coche propio  ★ RECOMENDADO", STRUCTURE_LEAN,  SETUP_LEAN, GREEN),
+    ]):
+        row_start = 2 + scen_idx * 22
+
+        apply_header(ws, row_start, 1, 21,
+            f"ESCENARIO {scen_name}", s_color)
+        ws.row_dimensions[row_start].height = 28
+
+        # Setup cost row
+        r = row_start + 1
+        label_cell(ws, r, 1, f"INVERSIÓN INICIAL (setup)", bold=True)
+        data_cell(ws, r, 2, -setup, EURO,
+                  "FFCCCC" if scen_idx == 0 else "D6E4F0")
+        for i in range(3, 22):
+            ws.cell(row=r, column=i, value="").border = border_thin()
+        r += 1
+
+        # Month headers
+        ws.cell(row=r, column=1, value="Concepto").fill = fill(s_color)
+        ws.cell(row=r, column=1).font = Font(bold=True, color=WHITE, size=9)
+        ws.cell(row=r, column=1).border = border_thin()
+        ws.cell(row=r, column=1).alignment = center()
+        for m_i, m in enumerate(MONTHS):
+            c = ws.cell(row=r, column=2+m_i, value=m)
+            c.fill = fill(BLUE_LIGHT)
+            c.font = Font(bold=True, color=BLUE_DARK, size=9)
+            c.border = border_thin()
+            c.alignment = center()
+        ws.cell(row=r, column=21, value="TOTAL").fill = fill(GOLD)
+        ws.cell(row=r, column=21).font = Font(bold=True, color=BLUE_DARK, size=9)
+        ws.cell(row=r, column=21).border = border_thin()
+        ws.cell(row=r, column=21).alignment = center()
+        r += 1
+
+        row_labels = [
+            ("Nº empleados activos",        "n_emp"),
+            ("Horas facturadas/mes",        "h_bill"),
+            ("Ingresos (22,03 B2B / 22,22 B2C)", "rev"),
+            ("— Costes laborales empl.",   "labor"),
+            ("— Cuota autónomo titular",   "owner"),
+            ("— Materiales y transporte",  "mat"),
+            (f"— Estructura ({struct_cost:.0f} €/mes)", "struct"),
+            ("EBITDA MENSUAL",             "ebitda"),
+            ("FLUJO ACUMULADO",            "acum"),
+        ]
+
+        monthly_data = {k: [] for _, k in row_labels}
+        cumulative = -setup
+
+        for m_i, (n_emp, occ) in enumerate(SCHEDULE):
+            h_bill = n_emp * HOURS_MO * occ if n_emp > 0 else 0
+            rev    = h_bill * PRICE_AVG
+            labor  = n_emp * LABOR_MO
+            o_ss   = owner_ss[m_i]
+            mat    = h_bill * VAR_H
+            struct = struct_cost
+            ebitda = rev - labor - o_ss - mat - struct
+            cumulative += ebitda
+
+            vals_map = dict(n_emp=n_emp, h_bill=h_bill, rev=rev,
+                            labor=-labor, owner=-o_ss, mat=-mat,
+                            struct=-struct, ebitda=ebitda, acum=cumulative)
+            for _, k in row_labels:
+                monthly_data[k].append(vals_map[k])
+
+        for rl_idx, (label, key) in enumerate(row_labels):
+            is_ebitda = key == "ebitda"
+            is_acum   = key == "acum"
+            is_total_row = is_ebitda or is_acum
+            is_h = key == "h_bill"
+            is_n = key == "n_emp"
+
+            c = ws.cell(row=r, column=1, value=label)
+            c.fill = fill(BLUE_LIGHT if is_total_row else WHITE)
+            c.font = Font(bold=is_total_row, color=BLUE_DARK, size=9)
+            c.border = border_thin()
+
+            vals = monthly_data[key]
+
+            for m_i, v in enumerate(vals):
+                cell = ws.cell(row=r, column=2+m_i, value=v)
+                cell.border = border_thin()
+                cell.alignment = right()
+                if is_n:
+                    cell.number_format = '0'
+                    cell.alignment = center()
+                elif is_h:
+                    cell.number_format = '#,##0.0 "h"'
+                else:
+                    cell.number_format = EURO
+
+                if is_ebitda:
+                    cell.fill = fill(GREEN if v >= 0 else "FFCCCC")
+                    cell.font = Font(bold=True, color=BLUE_DARK, size=9)
+                if is_acum:
+                    cell.fill = fill("70AD47" if v >= 0 else "F4C7C3")
+                    cell.font = Font(bold=True, color=WHITE, size=9)
+
+            # Total column
+            total_v = sum(vals) if key not in ("n_emp","acum","h_bill") else vals[-1]
+            tc = ws.cell(row=r, column=21, value=total_v)
+            tc.border = border_thin()
+            tc.alignment = right()
+            tc.fill = fill(GOLD)
+            tc.font = Font(bold=True, color=BLUE_DARK, size=9)
+            if is_n:  tc.number_format = '0'
+            elif is_h: tc.number_format = '#,##0.0 "h"'
+            else:      tc.number_format = EURO
+
+            r += 1
+
+        # Summary row
+        max_neg = min(monthly_data["acum"])
+        first_pos_m = next((i+1 for i, v in enumerate(monthly_data["ebitda"]) if v > 0), None)
+        bep_acum_m  = next((i+1 for i, v in enumerate(monthly_data["acum"])   if v >= 0), None)
+
+        apply_subheader(ws, r, 1, 21,
+            f"  ✅ Capital necesario: {abs(min(-setup, min(monthly_data['acum']))):.0f} € mín. "
+            f"| Rec. con +25%: {abs(min(-setup, min(monthly_data['acum'])))*1.25:.0f} €  "
+            f"| 1er mes positivo: M{first_pos_m}  "
+            f"| BEP acumulado: {'M'+str(bep_acum_m) if bep_acum_m else '>M18'}")
+        r += 2
+
+    # Column widths
+    ws.column_dimensions['A'].width = 35
+    for i in range(2, 22):
+        ws.column_dimensions[get_column_letter(i)].width = 10
 
     return ws
 
@@ -654,6 +803,7 @@ def main():
     build_planificacion(wb)
     build_facturacion(wb)
     build_cuenta_resultados(wb)
+    build_cashflow_lean(wb)
 
     path = "/home/user/cv-linkedin/brillopal/BrillOPal_Gestion.xlsx"
     wb.save(path)
