@@ -1,38 +1,714 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-  <title>Optimiza tu CV - Raghib HR</title>
-</head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ProyectatuCarrera · CV, LinkedIn y orientación laboral</title>
+<meta name="description" content="Optimización de CV, revisión de LinkedIn y orientación laboral con Raghib El Yousfi. Te digo exactamente dónde falla tu candidatura, antes de que pagues nada.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --oil:#0E4A52;
+    --oil-dark:#0A363C;
+    --coral:#E8664F;
+    --coral-dark:#C2462F;
+    --ink:#13262A;
+    --mist:#E6F0F0;
+    --white:#FFFFFF;
+    --max:1120px;
+  }
 
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important;}
+  }
+
+  body{
+    margin:0;
+    font-family:'Schibsted Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+    color:var(--ink);
+    background:var(--white);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  img, svg{max-width:100%; display:block;}
+
+  a{color:inherit; text-decoration:none;}
+
+  :focus-visible{
+    outline:3px solid var(--coral-dark);
+    outline-offset:3px;
+    border-radius:4px;
+  }
+
+  .wrap{
+    max-width:var(--max);
+    margin:0 auto;
+    padding:0 24px;
+  }
+
+  .hand{
+    font-family:'Caveat', cursive;
+    font-weight:600;
+  }
+
+  /* ---------- header ---------- */
+  .site-header{
+    position:sticky;
+    top:0;
+    z-index:50;
+    background:rgba(255,255,255,0.93);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid #d8e6e4;
+  }
+  .site-header .wrap{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    min-height:68px;
+    gap:16px;
+  }
+  .logo{
+    font-weight:800;
+    font-size:1.2rem;
+    color:var(--oil);
+    letter-spacing:-0.01em;
+    white-space:nowrap;
+  }
+  .logo span{color:var(--coral-dark);}
+  .main-nav{
+    display:flex;
+    gap:28px;
+  }
+  .main-nav a{
+    font-size:0.96rem;
+    font-weight:500;
+    color:var(--ink);
+    padding:6px 2px;
+    border-bottom:2px solid transparent;
+  }
+  .main-nav a:hover{border-bottom-color:var(--coral);}
+  .header-cta{
+    display:inline-flex;
+    align-items:center;
+    background:var(--oil);
+    color:var(--white);
+    font-weight:600;
+    font-size:0.92rem;
+    padding:10px 18px;
+    border-radius:8px;
+    white-space:nowrap;
+    transition:background 0.15s ease;
+  }
+  .header-cta:hover{background:var(--oil-dark);}
+  @media (max-width:760px){
+    .main-nav{display:none;}
+  }
+
+  /* ---------- buttons ---------- */
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    font-family:inherit;
+    font-weight:600;
+    font-size:1rem;
+    padding:14px 26px;
+    border-radius:10px;
+    cursor:pointer;
+    border:2px solid transparent;
+    transition:transform 0.12s ease, background 0.15s ease, box-shadow 0.15s ease;
+  }
+  .btn:hover{transform:translateY(-1px);}
+  .btn-primary{background:var(--oil); color:var(--white);}
+  .btn-primary:hover{background:var(--oil-dark);}
+  .btn-secondary{background:var(--white); color:var(--coral-dark); border-color:var(--coral);}
+  .btn-secondary:hover{background:#fdf1ee;}
+  .btn-on-dark{background:var(--coral); color:var(--white);}
+  .btn-on-dark:hover{background:var(--coral-dark);}
+  .btn-on-dark-outline{background:transparent; color:var(--white); border-color:rgba(255,255,255,0.55);}
+  .btn-on-dark-outline:hover{background:rgba(255,255,255,0.1);}
+  .btn-row{display:flex; gap:14px; flex-wrap:wrap;}
+
+  /* ---------- hero ---------- */
+  .hero{
+    padding:76px 0 64px;
+    background:
+      radial-gradient(circle at 85% 8%, rgba(232,102,79,0.07), transparent 42%),
+      var(--white);
+  }
+  .hero .wrap{
+    display:grid;
+    grid-template-columns:1.05fr 1fr;
+    gap:56px;
+    align-items:center;
+  }
+  .eyebrow{
+    display:inline-block;
+    font-size:0.86rem;
+    font-weight:600;
+    color:var(--coral-dark);
+    background:#fdf1ee;
+    padding:6px 14px;
+    border-radius:20px;
+    margin-bottom:18px;
+  }
+  .hero h1{
+    font-size:clamp(2.1rem, 4.2vw, 3.1rem);
+    line-height:1.12;
+    margin:0 0 20px;
+    color:var(--oil);
+    letter-spacing:-0.015em;
+  }
+  .hero h1 em{
+    font-style:normal;
+    color:var(--coral-dark);
+  }
+  .hero p.lead{
+    font-size:1.14rem;
+    color:#3a4a4c;
+    max-width:460px;
+    margin:0 0 30px;
+  }
+  .hero .note{
+    margin-top:18px;
+    font-size:0.9rem;
+    color:#5c6e70;
+  }
+
+  /* hero visual: marked-up CV */
+  .cv-figure{
+    position:relative;
+    justify-self:center;
+  }
+  .cv-card{
+    background:var(--white);
+    border:1px solid #e3ecea;
+    border-radius:10px;
+    box-shadow:0 22px 46px -18px rgba(14,74,82,0.28);
+    transform:rotate(-2.2deg);
+    padding:26px 26px 30px;
+    width:320px;
+  }
+  .cv-sticky{
+    position:absolute;
+    top:-18px;
+    right:-26px;
+    background:#fff6b8;
+    color:#5b5230;
+    padding:10px 14px 12px;
+    border-radius:4px;
+    box-shadow:0 8px 16px -6px rgba(0,0,0,0.25);
+    transform:rotate(5deg);
+    font-size:1.15rem;
+    line-height:1.1;
+  }
+  @media (max-width:980px){
+    .hero .wrap{grid-template-columns:1fr; text-align:center;}
+    .hero p.lead{margin-left:auto; margin-right:auto;}
+    .btn-row{justify-content:center;}
+    .cv-sticky{right:-6px;}
+  }
+  @media (max-width:420px){
+    .cv-card{width:100%; max-width:300px;}
+  }
+
+  /* ---------- sections generic ---------- */
+  section{padding:72px 0;}
+  .section-head{
+    max-width:620px;
+    margin:0 0 44px;
+  }
+  .section-head.center{margin-left:auto; margin-right:auto; text-align:center;}
+  .section-tag{
+    font-size:0.85rem;
+    font-weight:600;
+    color:var(--coral-dark);
+    margin:0 0 8px;
+  }
+  h2{
+    font-size:clamp(1.6rem, 3vw, 2.1rem);
+    color:var(--oil);
+    margin:0 0 14px;
+    letter-spacing:-0.01em;
+  }
+  .section-head p{
+    color:#3a4a4c;
+    font-size:1.04rem;
+    margin:0;
+  }
+
+  /* ---------- services ---------- */
+  .services-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:24px;
+  }
+  .service-card{
+    border:1px solid #e3ecea;
+    border-radius:12px;
+    padding:28px 26px;
+    background:var(--white);
+  }
+  .service-num{
+    font-family:'Caveat', cursive;
+    font-size:2.2rem;
+    color:var(--coral);
+    line-height:1;
+    margin-bottom:6px;
+  }
+  .service-card h3{
+    font-size:1.12rem;
+    color:var(--oil);
+    margin:0 0 10px;
+  }
+  .service-card p{
+    font-size:0.96rem;
+    color:#3a4a4c;
+    margin:0;
+  }
+  @media (max-width:860px){
+    .services-grid{grid-template-columns:1fr;}
+  }
+
+  /* ---------- pricing ---------- */
+  .pricing{background:var(--mist);}
+  .pricing-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:24px;
+    align-items:stretch;
+  }
+  .price-card{
+    background:var(--white);
+    border:1px solid #d7e4e2;
+    border-radius:14px;
+    padding:30px 26px;
+    display:flex;
+    flex-direction:column;
+  }
+  .price-card.is-highlight{
+    background:var(--oil);
+    color:var(--white);
+    border-color:var(--oil);
+    box-shadow:0 24px 44px -20px rgba(10,54,60,0.45);
+    transform:translateY(-6px);
+  }
+  .price-badge{
+    display:inline-block;
+    font-size:0.8rem;
+    font-weight:600;
+    background:var(--coral);
+    color:var(--white);
+    padding:4px 12px;
+    border-radius:20px;
+    margin-bottom:14px;
+    width:fit-content;
+  }
+  .price-card h3{
+    font-size:1.1rem;
+    margin:0 0 4px;
+    color:var(--oil);
+  }
+  .price-card.is-highlight h3{color:var(--white);}
+  .price-tagline{
+    font-size:0.9rem;
+    color:#5c6e70;
+    margin:0 0 20px;
+  }
+  .price-card.is-highlight .price-tagline{color:#cfe3e1;}
+  .price-amount{
+    font-size:2.6rem;
+    font-weight:700;
+    color:var(--coral-dark);
+    margin-bottom:4px;
+    letter-spacing:-0.02em;
+  }
+  .price-card.is-highlight .price-amount{color:var(--coral);}
+  .price-unit{
+    font-size:0.88rem;
+    color:#5c6e70;
+    margin-bottom:22px;
+  }
+  .price-card.is-highlight .price-unit{color:#cfe3e1;}
+  .price-features{
+    list-style:none;
+    margin:0 0 26px;
+    padding:0;
+    font-size:0.94rem;
+    flex-grow:1;
+  }
+  .price-features li{
+    padding:9px 0;
+    border-top:1px solid #edf2f1;
+    display:flex;
+    gap:10px;
+  }
+  .price-card.is-highlight .price-features li{border-top-color:rgba(255,255,255,0.14);}
+  .price-features li:first-child{border-top:none;}
+  .price-features li::before{
+    content:"+";
+    color:var(--coral-dark);
+    font-weight:700;
+    flex-shrink:0;
+  }
+  .price-card.is-highlight .price-features li::before{color:var(--coral);}
+  .price-card .btn{width:100%;}
+
+  @media (max-width:860px){
+    .pricing-grid{grid-template-columns:1fr;}
+    .price-card.is-highlight{transform:none;}
+  }
+
+  /* ---------- how it works ---------- */
+  .how-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:32px;
+  }
+  .how-step{position:relative; padding-left:4px;}
+  .how-step .step-mark{
+    font-family:'Caveat', cursive;
+    font-size:2.6rem;
+    color:var(--coral);
+    line-height:1;
+    display:block;
+    margin-bottom:8px;
+  }
+  .how-step h3{
+    color:var(--oil);
+    font-size:1.08rem;
+    margin:0 0 8px;
+  }
+  .how-step p{
+    color:#3a4a4c;
+    font-size:0.96rem;
+    margin:0;
+  }
+  @media (max-width:860px){
+    .how-grid{grid-template-columns:1fr; gap:26px;}
+  }
+
+  /* ---------- about ---------- */
+  .about{background:var(--mist);}
+  .about .wrap{
+    display:grid;
+    grid-template-columns:0.9fr 1.3fr;
+    gap:48px;
+    align-items:center;
+  }
+  .about-card{
+    background:var(--white);
+    border-radius:14px;
+    padding:30px;
+    border:1px solid #d7e4e2;
+  }
+  .about-initial{
+    width:62px; height:62px;
+    border-radius:50%;
+    background:var(--oil);
+    color:var(--white);
+    font-weight:700;
+    font-size:1.4rem;
+    display:flex; align-items:center; justify-content:center;
+    margin-bottom:16px;
+  }
+  .about-card h3{color:var(--oil); margin:0 0 4px; font-size:1.1rem;}
+  .about-card .role{color:var(--coral-dark); font-size:0.9rem; font-weight:600; margin-bottom:16px;}
+  .about-tags{display:flex; flex-wrap:wrap; gap:8px; margin-top:16px;}
+  .about-tags span{
+    font-size:0.82rem;
+    background:var(--mist);
+    color:var(--oil);
+    padding:5px 11px;
+    border-radius:20px;
+  }
+  .about-copy p{color:#2d3f41; font-size:1.02rem;}
+  .about-copy p + p{margin-top:14px;}
+  @media (max-width:860px){
+    .about .wrap{grid-template-columns:1fr;}
+  }
+
+  /* ---------- final cta ---------- */
+  .cta-final{
+    background:var(--oil-dark);
+    color:var(--white);
+    text-align:center;
+  }
+  .cta-final h2{color:var(--white);}
+  .cta-final p{
+    color:#cfe3e1;
+    max-width:520px;
+    margin:0 auto 32px;
+    font-size:1.05rem;
+  }
+  .cta-final .btn-row{justify-content:center;}
+
+  /* ---------- footer ---------- */
+  footer{
+    background:var(--oil-dark);
+    color:#b9d2cf;
+    padding:36px 0 30px;
+    border-top:1px solid rgba(255,255,255,0.08);
+  }
+  footer .wrap{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:space-between;
+    align-items:center;
+    gap:16px;
+  }
+  footer .brand{color:var(--white); font-weight:700;}
+  footer .brand span{color:var(--coral);}
+  footer .flinks{display:flex; gap:20px; font-size:0.92rem;}
+  footer .flinks a:hover{color:var(--white);}
+  footer small{display:block; margin-top:18px; color:#7fa0a0; font-size:0.8rem;}
+</style>
+</head>
 <body>
 
-  <!-- Título principal -->
-  <h1>Mejora tu CV y LinkedIn</h1>
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="#top">Proyecta<span>tu</span>Carrera</a>
+    <nav class="main-nav" aria-label="Navegación principal">
+      <a href="#servicios">Servicios</a>
+      <a href="#precios">Precios</a>
+      <a href="#como-funciona">Cómo funciona</a>
+      <a href="#sobre-mi">Sobre mí</a>
+    </nav>
+    <a class="header-cta" href="https://wa.me/34671795837" target="_blank" rel="noopener">Escríbeme</a>
+  </div>
+</header>
 
-  <!-- Descripción -->
-  <p>Rellena este formulario y te ayudaré a mejorar tu perfil profesional.</p>
+<main id="top">
 
-  <!-- Formulario -->
-  <form>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <span class="eyebrow">CV · LinkedIn · Orientación laboral</span>
+        <h1>Tu CV llega.<br>Pero no te <em>llaman</em>.</h1>
+        <p class="lead">Reviso tu CV y tu LinkedIn con la misma mirada con la que los descarta un reclutador. Te digo exactamente qué está fallando, antes de que decidas pagar nada.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="https://www.linkedin.com/in/raghib-el-yousfi" target="_blank" rel="noopener">Pedir diagnóstico por LinkedIn</a>
+          <a class="btn btn-secondary" href="https://wa.me/34671795837" target="_blank" rel="noopener">Escribir por WhatsApp</a>
+        </div>
+        <p class="note">Me mandas tu CV y en poco tiempo sabes dónde está el problema.</p>
+      </div>
 
-    <!-- Nombre -->
-    <label>Nombre:</label><br>
-    <input type="text"><br><br>
+      <div class="cv-figure">
+        <div class="cv-sticky hand">¿por qué<br>no me llaman?</div>
+        <div class="cv-card">
+          <svg viewBox="0 0 280 360" width="100%" role="img" aria-label="Ejemplo de un CV con tres fallos típicos marcados a mano: un titular genérico, un adjetivo sin contenido y una función descrita sin resultado.">
+            <!-- base paper lines -->
+            <rect x="0" y="0" width="280" height="360" fill="#ffffff"/>
+            <rect x="0" y="0" width="90" height="10" rx="2" fill="#0E4A52"/>
+            <rect x="0" y="18" width="150" height="7" rx="2" fill="#c7d8d6"/>
+            <rect x="0" y="32" width="110" height="7" rx="2" fill="#c7d8d6"/>
 
-    <!-- Email -->
-    <label>Email:</label><br>
-    <input type="email"><br><br>
+            <rect x="0" y="58" width="60" height="6" rx="2" fill="#9db6b3"/>
+            <rect x="0" y="72" width="230" height="7" rx="2" fill="#E6F0F0"/>
+            <rect x="0" y="86" width="190" height="7" rx="2" fill="#E6F0F0"/>
 
-    <!-- Experiencia -->
-    <label>Experiencia:</label><br>
-    <textarea></textarea><br><br>
+            <rect x="0" y="116" width="70" height="6" rx="2" fill="#9db6b3"/>
+            <rect x="0" y="130" width="200" height="7" rx="2" fill="#dfe9e8"/>
+            <rect x="0" y="144" width="240" height="7" rx="2" fill="#dfe9e8"/>
+            <rect x="0" y="158" width="150" height="7" rx="2" fill="#dfe9e8"/>
 
-    <!-- Botón -->
-    <button>Enviar</button>
+            <rect x="0" y="190" width="70" height="6" rx="2" fill="#9db6b3"/>
+            <rect x="0" y="204" width="220" height="7" rx="2" fill="#dfe9e8"/>
+            <rect x="0" y="218" width="210" height="7" rx="2" fill="#dfe9e8"/>
+            <rect x="0" y="232" width="180" height="7" rx="2" fill="#dfe9e8"/>
 
-  </form>
+            <rect x="0" y="264" width="70" height="6" rx="2" fill="#9db6b3"/>
+            <rect x="0" y="278" width="230" height="7" rx="2" fill="#E6F0F0"/>
+            <rect x="0" y="292" width="170" height="7" rx="2" fill="#E6F0F0"/>
 
-  <p>Servicio de optimización de CV y LinkedIn</p>
+            <!-- annotation 1: circle around headline -->
+            <path d="M -6,14 C -6,0 70,-6 155,2 C 170,4 170,34 150,36 C 70,42 -6,30 -6,14 Z"
+                  fill="none" stroke="#E8664F" stroke-width="2.4"/>
+            <text x="160" y="12" class="hand-text" font-family="Caveat, cursive" font-size="17" fill="#C2462F" transform="rotate(4 160 12)">no dice nada</text>
+
+            <!-- annotation 2: underline adjective line -->
+            <path d="M 40,92 C 90,98 150,98 195,93" fill="none" stroke="#E8664F" stroke-width="2.4" stroke-linecap="round"/>
+            <text x="150" y="110" font-family="Caveat, cursive" font-size="16" fill="#C2462F" transform="rotate(-3 150 110)">adjetivo vacío</text>
+
+            <!-- annotation 3: box + arrow on experience bullet -->
+            <rect x="-4" y="150" width="248" height="16" rx="3" fill="none" stroke="#E8664F" stroke-width="2.2"/>
+            <path d="M 196,172 C 206,182 214,190 222,198" fill="none" stroke="#E8664F" stroke-width="2.2" marker-end="url(#arrowhead)"/>
+            <text x="150" y="216" font-family="Caveat, cursive" font-size="16" fill="#C2462F" transform="rotate(3 150 216)">¿y el resultado?</text>
+
+            <defs>
+              <marker id="arrowhead" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+                <path d="M0,0 L8,4 L0,8 Z" fill="#E8664F"/>
+              </marker>
+            </defs>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICIOS -->
+  <section id="servicios">
+    <div class="wrap">
+      <div class="section-head center">
+        <p class="section-tag">Qué hago</p>
+        <h2>Tres cosas, bien hechas</h2>
+        <p>Nada de plantillas genéricas. Trabajo sobre tu caso, tu sector y tu objetivo.</p>
+      </div>
+      <div class="services-grid">
+        <div class="service-card">
+          <span class="service-num hand">01</span>
+          <h3>Optimización de CV</h3>
+          <p>Diagnóstico de por qué tu CV no está funcionando y reescritura completa, pensada para pasar los filtros automáticos (ATS) y para que un reclutador entienda tu valor en diez segundos.</p>
+        </div>
+        <div class="service-card">
+          <span class="service-num hand">02</span>
+          <h3>Revisión de LinkedIn</h3>
+          <p>Titular, extracto, experiencia y, sobre todo, las aptitudes: es lo que más rastrea el buscador interno de LinkedIn cuando una empresa busca candidatos.</p>
+        </div>
+        <div class="service-card">
+          <span class="service-num hand">03</span>
+          <h3>Orientación laboral</h3>
+          <p>Sesión de una hora para construir un plan de búsqueda realista: dónde mirar, qué formación priorizar y cómo distinguir una oferta seria de una fraudulenta.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRECIOS -->
+  <section id="precios" class="pricing">
+    <div class="wrap">
+      <div class="section-head center">
+        <p class="section-tag">Precios</p>
+        <h2>Precio cerrado, sin sorpresas</h2>
+        <p>Pagas una vez, sabes exactamente qué recibes. Sin suscripciones.</p>
+      </div>
+      <div class="pricing-grid">
+
+        <div class="price-card">
+          <h3>Básico</h3>
+          <p class="price-tagline">Para quien solo necesita el CV</p>
+          <div class="price-amount">15&nbsp;€</div>
+          <div class="price-unit">pago único</div>
+          <ul class="price-features">
+            <li>Diagnóstico de tu CV actual</li>
+            <li>Reescritura completa orientada a ATS</li>
+            <li>Entrega en Word editable y PDF</li>
+          </ul>
+          <a class="btn btn-secondary" href="https://wa.me/34671795837" target="_blank" rel="noopener">Elegir Básico</a>
+        </div>
+
+        <div class="price-card is-highlight">
+          <span class="price-badge">Más elegido</span>
+          <h3>Completo</h3>
+          <p class="price-tagline">CV + LinkedIn</p>
+          <div class="price-amount">25&nbsp;€</div>
+          <div class="price-unit">pago único</div>
+          <ul class="price-features">
+            <li>Todo lo del plan Básico</li>
+            <li>Revisión de titular, extracto y experiencia en LinkedIn</li>
+            <li>Ajuste de aptitudes para el buscador de LinkedIn</li>
+          </ul>
+          <a class="btn btn-on-dark" href="https://wa.me/34671795837" target="_blank" rel="noopener">Elegir Completo</a>
+        </div>
+
+        <div class="price-card">
+          <h3>Premium</h3>
+          <p class="price-tagline">CV + LinkedIn + orientación</p>
+          <div class="price-amount">50&nbsp;€</div>
+          <div class="price-unit">pago único</div>
+          <ul class="price-features">
+            <li>Todo lo del plan Completo</li>
+            <li>Sesión de 1 hora de orientación laboral</li>
+            <li>Plan de acción personalizado</li>
+          </ul>
+          <a class="btn btn-secondary" href="https://wa.me/34671795837" target="_blank" rel="noopener">Elegir Premium</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- COMO FUNCIONA -->
+  <section id="como-funciona">
+    <div class="wrap">
+      <div class="section-head center">
+        <p class="section-tag">Cómo funciona</p>
+        <h2>Tres pasos, sin vueltas</h2>
+      </div>
+      <div class="how-grid">
+        <div class="how-step">
+          <span class="step-mark hand">1</span>
+          <h3>Me mandas tu CV</h3>
+          <p>Por LinkedIn o WhatsApp, el que te resulte más cómodo.</p>
+        </div>
+        <div class="how-step">
+          <span class="step-mark hand">2</span>
+          <h3>Te digo dónde falla</h3>
+          <p>Sin coste y sin compromiso: qué está penalizando tu candidatura frente a los filtros de selección.</p>
+        </div>
+        <div class="how-step">
+          <span class="step-mark hand">3</span>
+          <h3>Eliges tu plan</h3>
+          <p>Precio cerrado desde el principio. Sin letra pequeña.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOBRE MI -->
+  <section id="sobre-mi" class="about">
+    <div class="wrap">
+      <div class="about-card">
+        <div class="about-initial">RE</div>
+        <h3>Raghib El Yousfi</h3>
+        <p class="role">ProyectatuCarrera</p>
+        <div class="about-tags">
+          <span>Relaciones Laborales y RRHH</span>
+          <span>Universidad de Valladolid</span>
+        </div>
+      </div>
+      <div class="about-copy">
+        <p>Trabajo en recursos humanos y conozco de primera mano cómo se filtra un CV antes de que lo vea una persona: por palabras clave, por formato y, muchas veces, por detalles que nadie te explica.</p>
+        <p>Atiendo en español, árabe y francés. Si quieres, empezamos por el diagnóstico: me mandas tu CV y en poco tiempo sabes qué está fallando.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <section class="cta-final">
+    <div class="wrap">
+      <h2>Mándame tu CV y te digo dónde falla.</h2>
+      <p>Sin coste por el diagnóstico. El precio solo se aplica si decides que lo corrija.</p>
+      <div class="btn-row">
+        <a class="btn btn-on-dark" href="https://wa.me/34671795837" target="_blank" rel="noopener">Escribir por WhatsApp</a>
+        <a class="btn btn-on-dark-outline" href="https://www.linkedin.com/in/raghib-el-yousfi" target="_blank" rel="noopener">Escribir por LinkedIn</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="brand">Raghib El Yousfi · Proyecta<span>tu</span>Carrera</div>
+    <div class="flinks">
+      <a href="https://www.linkedin.com/in/raghib-el-yousfi" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://wa.me/34671795837" target="_blank" rel="noopener">WhatsApp</a>
+    </div>
+  </div>
+  <div class="wrap">
+    <small>Palencia, España</small>
+  </div>
+</footer>
 
 </body>
 </html>
